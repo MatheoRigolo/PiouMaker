@@ -179,6 +179,7 @@
             createLevelButton.TabIndex = 8;
             createLevelButton.Text = "Créer un niveau";
             createLevelButton.UseVisualStyleBackColor = true;
+            createLevelButton.Click += createLevelButton_Click;
             // 
             // openFileDialog1
             // 
