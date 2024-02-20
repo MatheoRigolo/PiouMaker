@@ -57,6 +57,25 @@ namespace PiouMaker
             return levelPatterns;
         }
 
+        public Pattern getPattern(int patternIndex)
+        {
+            if (levelPatterns != null)
+            {
+                try
+                {
+                    return levelPatterns[patternIndex];
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("No pattern at selected index : " + patternIndex);
+                }
+            }
+            else
+            {
+                throw new Exception("No patterns in current level");
+            }
+        }
+
         public void setPatterns(List<Pattern> patterns)
         {
             this.levelPatterns = patterns;

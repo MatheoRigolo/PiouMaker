@@ -37,6 +37,15 @@
             tabPage2 = new TabPage();
             gamePanel = new Panel();
             propertiesPanel = new Panel();
+            modifyPropertyButton = new Button();
+            fourthPropertiesName = new Label();
+            fourthPropertiesContent = new Label();
+            thirdPropertiesName = new Label();
+            thirdPropertiesContent = new Label();
+            secondPropertiesName = new Label();
+            secondPropertiesContent = new Label();
+            firstPropertiesName = new Label();
+            firstPropertiesContent = new Label();
             label1 = new Label();
             patternList = new ListBox();
             levelName = new Label();
@@ -115,18 +124,121 @@
             // 
             propertiesPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             propertiesPanel.BackColor = Color.White;
+            propertiesPanel.Controls.Add(modifyPropertyButton);
+            propertiesPanel.Controls.Add(fourthPropertiesName);
+            propertiesPanel.Controls.Add(fourthPropertiesContent);
+            propertiesPanel.Controls.Add(thirdPropertiesName);
+            propertiesPanel.Controls.Add(thirdPropertiesContent);
+            propertiesPanel.Controls.Add(secondPropertiesName);
+            propertiesPanel.Controls.Add(secondPropertiesContent);
+            propertiesPanel.Controls.Add(firstPropertiesName);
+            propertiesPanel.Controls.Add(firstPropertiesContent);
             propertiesPanel.Controls.Add(label1);
             propertiesPanel.Location = new Point(791, 14);
             propertiesPanel.Name = "propertiesPanel";
             propertiesPanel.Size = new Size(206, 363);
             propertiesPanel.TabIndex = 3;
             // 
+            // modifyPropertyButton
+            // 
+            modifyPropertyButton.Location = new Point(48, 322);
+            modifyPropertyButton.Name = "modifyPropertyButton";
+            modifyPropertyButton.Size = new Size(114, 29);
+            modifyPropertyButton.TabIndex = 11;
+            modifyPropertyButton.Text = "Modifier";
+            modifyPropertyButton.UseVisualStyleBackColor = true;
+            // 
+            // fourthPropertiesName
+            // 
+            fourthPropertiesName.AutoSize = true;
+            fourthPropertiesName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            fourthPropertiesName.Location = new Point(17, 243);
+            fourthPropertiesName.Name = "fourthPropertiesName";
+            fourthPropertiesName.Size = new Size(168, 20);
+            fourthPropertiesName.TabIndex = 8;
+            fourthPropertiesName.Text = "Quatrième propriétée :";
+            fourthPropertiesName.Visible = false;
+            // 
+            // fourthPropertiesContent
+            // 
+            fourthPropertiesContent.AutoSize = true;
+            fourthPropertiesContent.Location = new Point(17, 263);
+            fourthPropertiesContent.Name = "fourthPropertiesContent";
+            fourthPropertiesContent.Size = new Size(62, 20);
+            fourthPropertiesContent.TabIndex = 7;
+            fourthPropertiesContent.Text = "Valeur 4";
+            fourthPropertiesContent.Visible = false;
+            // 
+            // thirdPropertiesName
+            // 
+            thirdPropertiesName.AutoSize = true;
+            thirdPropertiesName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            thirdPropertiesName.Location = new Point(17, 179);
+            thirdPropertiesName.Name = "thirdPropertiesName";
+            thirdPropertiesName.Size = new Size(162, 20);
+            thirdPropertiesName.TabIndex = 6;
+            thirdPropertiesName.Text = "Troisième propriétée :";
+            thirdPropertiesName.Visible = false;
+            // 
+            // thirdPropertiesContent
+            // 
+            thirdPropertiesContent.AutoSize = true;
+            thirdPropertiesContent.Location = new Point(17, 199);
+            thirdPropertiesContent.Name = "thirdPropertiesContent";
+            thirdPropertiesContent.Size = new Size(62, 20);
+            thirdPropertiesContent.TabIndex = 5;
+            thirdPropertiesContent.Text = "Valeur 3";
+            thirdPropertiesContent.Visible = false;
+            // 
+            // secondPropertiesName
+            // 
+            secondPropertiesName.AutoSize = true;
+            secondPropertiesName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            secondPropertiesName.Location = new Point(15, 117);
+            secondPropertiesName.Name = "secondPropertiesName";
+            secondPropertiesName.Size = new Size(164, 20);
+            secondPropertiesName.TabIndex = 4;
+            secondPropertiesName.Text = "Deuxième propriétée :";
+            secondPropertiesName.Visible = false;
+            // 
+            // secondPropertiesContent
+            // 
+            secondPropertiesContent.AutoSize = true;
+            secondPropertiesContent.Location = new Point(15, 137);
+            secondPropertiesContent.Name = "secondPropertiesContent";
+            secondPropertiesContent.Size = new Size(62, 20);
+            secondPropertiesContent.TabIndex = 3;
+            secondPropertiesContent.Text = "Valeur 2";
+            secondPropertiesContent.Visible = false;
+            // 
+            // firstPropertiesName
+            // 
+            firstPropertiesName.AutoSize = true;
+            firstPropertiesName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            firstPropertiesName.Location = new Point(17, 60);
+            firstPropertiesName.Name = "firstPropertiesName";
+            firstPropertiesName.Size = new Size(157, 20);
+            firstPropertiesName.TabIndex = 2;
+            firstPropertiesName.Text = "Première propriétée :";
+            firstPropertiesName.Visible = false;
+            // 
+            // firstPropertiesContent
+            // 
+            firstPropertiesContent.AutoSize = true;
+            firstPropertiesContent.Location = new Point(17, 80);
+            firstPropertiesContent.Name = "firstPropertiesContent";
+            firstPropertiesContent.Size = new Size(62, 20);
+            firstPropertiesContent.TabIndex = 1;
+            firstPropertiesContent.Text = "Valeur 1";
+            firstPropertiesContent.Visible = false;
+            // 
             // label1
             // 
             label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline);
             label1.Location = new Point(17, 14);
             label1.Name = "label1";
-            label1.Size = new Size(76, 20);
+            label1.Size = new Size(81, 20);
             label1.TabIndex = 0;
             label1.Text = "Propriétés";
             // 
@@ -139,10 +251,12 @@
             patternList.Size = new Size(158, 304);
             patternList.TabIndex = 4;
             patternList.Visible = false;
+            patternList.SelectedIndexChanged += patternList_SelectedIndexChanged;
             // 
             // levelName
             // 
             levelName.BorderStyle = BorderStyle.FixedSingle;
+            levelName.Cursor = Cursors.Hand;
             levelName.Location = new Point(12, 14);
             levelName.Name = "levelName";
             levelName.Size = new Size(158, 46);
@@ -225,5 +339,14 @@
         private Button openLevelButton;
         private Button createLevelButton;
         private OpenFileDialog openFileDialog1;
+        private Label firstPropertiesContent;
+        private Label firstPropertiesName;
+        private Button modifyPropertyButton;
+        private Label fourthPropertiesName;
+        private Label fourthPropertiesContent;
+        private Label thirdPropertiesName;
+        private Label thirdPropertiesContent;
+        private Label secondPropertiesName;
+        private Label secondPropertiesContent;
     }
 }

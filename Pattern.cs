@@ -10,7 +10,6 @@ namespace PiouMaker
     {
         private List<Wave> patternWaves;
         private string patternName;
-        private int duration = -1;
         private int order = -1;
         private bool isRandom = false;
 
@@ -28,16 +27,6 @@ namespace PiouMaker
         public void setPatternName(string patternName)
         {
             this.patternName = patternName;
-        }
-
-        public int getDuration()
-        {
-            return duration;
-        }
-
-        public void setDuration(int duration)
-        {
-            this.duration = duration;
         }
 
         public int getOrder()

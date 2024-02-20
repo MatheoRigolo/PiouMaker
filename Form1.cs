@@ -60,7 +60,46 @@ namespace PiouMaker
 
         private void label2_Click(object sender, EventArgs e)
         {
+            if (currentLevel != null)
+            {
+                //Level listener
+                firstPropertiesName.Visible = true;
+                firstPropertiesName.Text = "Nom du niveau : ";
+                firstPropertiesContent.Visible = true;
+                firstPropertiesContent.Text = currentLevel.getLevelName();
 
+                secondPropertiesName.Visible = true;
+                secondPropertiesName.Text = "Est infini : ";
+                secondPropertiesContent.Visible = true;
+                bool isInfinite = currentLevel.getIsInfinite();
+                if (isInfinite)
+                {
+                    secondPropertiesContent.Text = "vrai";
+                }
+                else
+                {
+                    secondPropertiesContent.Text = "faux";
+                }
+
+
+                thirdPropertiesName.Visible = true;
+                thirdPropertiesName.Text = "Est aléatoire : ";
+                thirdPropertiesContent.Visible = true;
+                bool isRandom = currentLevel.getIsRandom();
+                if (isRandom)
+                {
+                    thirdPropertiesContent.Text = "vrai";
+                }
+                else
+                {
+                    thirdPropertiesContent.Text = "faux";
+                }
+
+                fourthPropertiesName.Visible = true;
+                fourthPropertiesName.Text = "Nombre de pattern : ";
+                fourthPropertiesContent.Visible = true;
+                fourthPropertiesContent.Text = currentLevel.getPatterns().Count.ToString();
+            }
         }
 
         private void openLevelButton_Click(object sender, EventArgs e)
@@ -95,86 +134,14 @@ namespace PiouMaker
                 {
                     patternList.Items.Add(patternNames[i]);
                 }
+                fileStream.Close();
             }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            //TEMP C POUR LES TEST
-            currentLevel.addPattern(new Pattern("ouoi oiuoi"));
-
-
-
             //Truc de la validation
-            XmlWriter xmlWriter = XmlWriter.Create(currentLevel.getFilePath());
-            xmlWriter.WriteStartDocument();
-            xmlWriter.WriteStartElement("level");
-            if (currentLevel.getIsRandom())
-            {
-                xmlWriter.WriteAttributeString("isRandom", "1");
-            }
-            else
-            {
-                xmlWriter.WriteAttributeString("isRandom", "0");
-            }
-            if (currentLevel.getIsInfinite())
-            {
-                xmlWriter.WriteAttributeString("isInfinite", "1");
-            }
-            else
-            {
-                xmlWriter.WriteAttributeString("isInfinite", "0");
-            }
-
-            for (int i=0; i < currentLevel.getPatterns().Count; i++)
-            {
-                Pattern currentPattern = currentLevel.getPatterns()[i];
-                xmlWriter.WriteStartElement("pattern");
-                xmlWriter.WriteAttributeString("name", currentPattern.getPatternName());
-                if (currentPattern.getDuration() != -1)
-                {
-                    xmlWriter.WriteAttributeString("duration", currentPattern.getDuration().ToString());
-                }
-                if (currentPattern.getIsRandom())
-                {
-                    xmlWriter.WriteAttributeString("isRandom", "1");
-                }
-                else
-                {
-                    xmlWriter.WriteAttributeString("isRandom", "0");
-                }
-                if (currentPattern.getOrder() != -1)
-                {
-                    xmlWriter.WriteAttributeString("order", currentPattern.getOrder().ToString());
-                }
-                for (int j=0; j < currentPattern.getPatternWaves().Count; j++)
-                {
-                    Wave currentWave = currentPattern.getPatternWaves()[j];
-                    xmlWriter.WriteStartElement("wave");
-                    if (currentWave.getDuration() != -1)
-                    {
-                        xmlWriter.WriteAttributeString("duration", currentWave.getDuration().ToString());
-                    }
-                    for (int u=0; u<currentWave.getEnemyList().Count; u++)
-                    {
-                        Enemy currentEnemy = currentWave.getEnemyList()[u];
-                        xmlWriter.WriteStartElement("enemy");
-                        if (currentEnemy.getSpawnTime() != -1)
-                        {
-                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.getSpawnTime().ToString());
-                        }
-                        xmlWriter.WriteAttributeString("type", currentEnemy.getEnemyType());
-                        string posString = currentEnemy.getPos().X + ";" + currentEnemy.getPos().Y;
-                        xmlWriter.WriteAttributeString("pos", posString);
-                        xmlWriter.WriteEndElement();
-                    }
-                    xmlWriter.WriteEndElement();
-                }
-                xmlWriter.WriteEndElement();
-            }
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndDocument();
-            xmlWriter.Close();
+            xmlManager.saveLevel(currentLevel);
         }
 
         private void createLevelButton_Click(object sender, EventArgs e)
@@ -200,6 +167,42 @@ namespace PiouMaker
                 createLevelButton.Visible = false;
                 //on afficher la liste des patterns
                 patternList.Visible = true;
+            }
+        }
+
+        private void patternList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Listener de la patternList
+            if (patternList.SelectedItem.ToString() != "-1")
+            {
+                firstPropertiesName.Visible = true;
+                firstPropertiesName.Text = "Nom du pattern : ";
+                firstPropertiesContent.Visible = true;
+                firstPropertiesContent.Text = patternList.SelectedItem.ToString();
+
+               secondPropertiesName.Visible = true;
+               secondPropertiesName.Text = "Ordre : ";
+               secondPropertiesContent.Visible = true;
+               secondPropertiesContent.Text = currentLevel.getPattern(patternList.SelectedIndex).getOrder().ToString();
+
+                thirdPropertiesName.Visible = true;
+                thirdPropertiesName.Text = "Est aléatoire : ";
+                thirdPropertiesContent.Visible = true;
+                bool isRandom = currentLevel.getPattern(patternList.SelectedIndex).getIsRandom();
+                if (isRandom)
+                {
+                    thirdPropertiesContent.Text = "vrai";
+                }
+                else
+                {
+                    thirdPropertiesContent.Text = "faux";
+                }
+                
+
+               fourthPropertiesName.Visible = true;
+               fourthPropertiesName.Text = "Nombre de vagues : ";
+               fourthPropertiesContent.Visible = true;
+               fourthPropertiesContent.Text = currentLevel.getPattern(patternList.SelectedIndex).getPatternWaves().Count.ToString();
             }
         }
     }

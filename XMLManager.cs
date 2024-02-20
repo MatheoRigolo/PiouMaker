@@ -102,5 +102,74 @@ namespace PiouMaker
                 }
             }
         }
+
+        public void saveLevel(Level currentLevel)
+        {
+            XmlWriter xmlWriter = XmlWriter.Create(currentLevel.getFilePath());
+            xmlWriter.WriteStartDocument();
+            xmlWriter.WriteStartElement("level");
+            if (currentLevel.getIsRandom())
+            {
+                xmlWriter.WriteAttributeString("isRandom", "1");
+            }
+            else
+            {
+                xmlWriter.WriteAttributeString("isRandom", "0");
+            }
+            if (currentLevel.getIsInfinite())
+            {
+                xmlWriter.WriteAttributeString("isInfinite", "1");
+            }
+            else
+            {
+                xmlWriter.WriteAttributeString("isInfinite", "0");
+            }
+
+            for (int i = 0; i < currentLevel.getPatterns().Count; i++)
+            {
+                Pattern currentPattern = currentLevel.getPatterns()[i];
+                xmlWriter.WriteStartElement("pattern");
+                xmlWriter.WriteAttributeString("name", currentPattern.getPatternName());
+                if (currentPattern.getIsRandom())
+                {
+                    xmlWriter.WriteAttributeString("isRandom", "1");
+                }
+                else
+                {
+                    xmlWriter.WriteAttributeString("isRandom", "0");
+                }
+                if (currentPattern.getOrder() != -1)
+                {
+                    xmlWriter.WriteAttributeString("order", currentPattern.getOrder().ToString());
+                }
+                for (int j = 0; j < currentPattern.getPatternWaves().Count; j++)
+                {
+                    Wave currentWave = currentPattern.getPatternWaves()[j];
+                    xmlWriter.WriteStartElement("wave");
+                    if (currentWave.getDuration() != -1)
+                    {
+                        xmlWriter.WriteAttributeString("duration", currentWave.getDuration().ToString());
+                    }
+                    for (int u = 0; u < currentWave.getEnemyList().Count; u++)
+                    {
+                        Enemy currentEnemy = currentWave.getEnemyList()[u];
+                        xmlWriter.WriteStartElement("enemy");
+                        if (currentEnemy.getSpawnTime() != -1)
+                        {
+                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.getSpawnTime().ToString());
+                        }
+                        xmlWriter.WriteAttributeString("type", currentEnemy.getEnemyType());
+                        string posString = currentEnemy.getPos().X + ";" + currentEnemy.getPos().Y;
+                        xmlWriter.WriteAttributeString("pos", posString);
+                        xmlWriter.WriteEndElement();
+                    }
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+            }
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Close();
+        }
     }
 }
