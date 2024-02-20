@@ -36,6 +36,7 @@
             enemies = new ImageList(components);
             tabPage2 = new TabPage();
             gamePanel = new Panel();
+            patternList = new TreeView();
             propertiesPanel = new Panel();
             modifyPropertyButton = new Button();
             fourthPropertiesName = new Label();
@@ -47,7 +48,6 @@
             firstPropertiesName = new Label();
             firstPropertiesContent = new Label();
             label1 = new Label();
-            patternList = new ListBox();
             levelName = new Label();
             saveButton = new Button();
             openLevelButton = new Button();
@@ -119,6 +119,15 @@
             gamePanel.Name = "gamePanel";
             gamePanel.Size = new Size(571, 363);
             gamePanel.TabIndex = 2;
+            // 
+            // patternList
+            // 
+            patternList.Location = new Point(12, 74);
+            patternList.Name = "patternList";
+            patternList.Size = new Size(158, 303);
+            patternList.TabIndex = 9;
+            patternList.Visible = false;
+            patternList.AfterSelect += patternList_AfterSelect;
             // 
             // propertiesPanel
             // 
@@ -242,17 +251,6 @@
             label1.TabIndex = 0;
             label1.Text = "Propriétés";
             // 
-            // patternList
-            // 
-            patternList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            patternList.FormattingEnabled = true;
-            patternList.Location = new Point(12, 74);
-            patternList.Name = "patternList";
-            patternList.Size = new Size(158, 304);
-            patternList.TabIndex = 4;
-            patternList.Visible = false;
-            patternList.SelectedIndexChanged += patternList_SelectedIndexChanged;
-            // 
             // levelName
             // 
             levelName.BorderStyle = BorderStyle.FixedSingle;
@@ -287,7 +285,7 @@
             // 
             // createLevelButton
             // 
-            createLevelButton.Location = new Point(12, 184);
+            createLevelButton.Location = new Point(12, 189);
             createLevelButton.Name = "createLevelButton";
             createLevelButton.Size = new Size(158, 29);
             createLevelButton.TabIndex = 8;
@@ -333,7 +331,6 @@
         private Panel gamePanel;
         private Panel propertiesPanel;
         private Label label1;
-        private ListBox patternList;
         private Label levelName;
         private Button saveButton;
         private Button openLevelButton;
@@ -348,5 +345,6 @@
         private Label thirdPropertiesContent;
         private Label secondPropertiesName;
         private Label secondPropertiesContent;
+        private TreeView patternList;
     }
 }

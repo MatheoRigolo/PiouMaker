@@ -9,7 +9,7 @@ namespace PiouMaker
     public class Pattern
     {
         private List<Wave> patternWaves;
-        private string patternName;
+        private string patternName = "nouveau Pattern";
         private int order = -1;
         private bool isRandom = false;
 
@@ -52,6 +52,25 @@ namespace PiouMaker
         public List<Wave> getPatternWaves()
         {
             return patternWaves;
+        }
+
+        public Wave getWave(int index)
+        {
+            if (patternWaves != null)
+            {
+                try
+                {
+                    return patternWaves[index];
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("No wave at selected index : " + index);
+                }
+            }
+            else
+            {
+                throw new Exception("No waves in current pattern");
+            }
         }
 
         public void setPatternWaves(List<Wave> patternWaves)
