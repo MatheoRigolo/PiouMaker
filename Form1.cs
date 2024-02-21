@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.Xml;
-using System.Xml.Serialization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PiouMaker
 {
@@ -53,6 +53,8 @@ namespace PiouMaker
             if (currentLevel != null)
             {
                 //Level listener
+                modifyPropertyButton.Visible = true;
+
                 firstPropertiesName.Visible = true;
                 firstPropertiesName.Text = "Nom du niveau : ";
                 firstPropertiesContent.Visible = true;
@@ -92,6 +94,16 @@ namespace PiouMaker
             }
         }
 
+        private void label2_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && currentLevel != null)
+            {
+                // On clique droit sur un pattern
+                contextMenuPattern.Items[0].Visible = true;
+                contextMenuPattern.Show(levelName, e.Location);
+            }
+        }
+
         private void openLevelButton_Click(object sender, EventArgs e)
         {
             //open a .piou file
@@ -118,21 +130,7 @@ namespace PiouMaker
                 Stream fileStream = openFileDialog1.OpenFile();
                 xmlManager = new XMLManager(currentLevel, fileStream);
 
-                List<String> patternNames;
-                patternNames = currentLevel.getPatternNames();
-                for (int i = 0; i < patternNames.Count; i++)
-                {
-                    patternList.Nodes.Add(patternNames[i]);
-                }
-                List<Pattern> patterns = currentLevel.getPatterns();
-                for (int i = 0; i < patterns.Count; i++)
-                {
-                    List<Wave> waveList = patterns[i].getPatternWaves();
-                    for (int j =0; j < waveList.Count; j++)
-                    {
-                        patternList.Nodes[i].Nodes.Add("Vague "+(j+1));
-                    }
-                }
+                refreshPatternList();
                 fileStream.Close();
             }
         }
@@ -171,6 +169,7 @@ namespace PiouMaker
 
         private void patternList_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            modifyPropertyButton.Visible = true;
             //Listener de la patternList
             if (patternList.SelectedNode.Parent == null)
             {
@@ -221,6 +220,93 @@ namespace PiouMaker
                 secondPropertiesName.Text = "Nombre d'ennemis : ";
                 secondPropertiesContent.Visible = true;
                 secondPropertiesContent.Text = currentLevel.getPattern(patternList.SelectedNode.Parent.Index).getWave(patternList.SelectedNode.Index).getEnemyList().Count.ToString();
+            }
+        }
+        
+        private void patternList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            patternList.SelectedNode = e.Node;
+            if (e.Button == MouseButtons.Right && e.Node.Parent == null)
+            {
+                // On clique droit sur un pattern
+                contextMenuPattern.Items[1].Visible = true;
+                contextMenuPattern.Items[2].Visible = true;
+                contextMenuPattern.Show(patternList, e.Location);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                contextMenuPattern.Items[3].Visible = true;
+                contextMenuPattern.Show(patternList, e.Location);
+            }
+        }
+
+        private void patternList_MouseClick(object sender, MouseEventArgs e)
+        {
+            //On regarde si on clique autre part que sur un node
+            TreeViewHitTestInfo hitTestInfo = patternList.HitTest(e.Location);
+            if (e.Button == MouseButtons.Right &&  hitTestInfo.Node == null)
+            {
+                contextMenuPattern.Items[0].Visible = true;
+                contextMenuPattern.Show(patternList, e.Location);
+            }
+        }
+
+        private void contextMenuPattern_Closing(object sender, CancelEventArgs e)
+        {
+            for (int i=0; i< contextMenuPattern.Items.Count; i++)
+            {
+                contextMenuPattern.Items[i].Visible = false;
+            }
+        }
+
+        private void contexMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            ToolStripItem item = e.ClickedItem;
+            if (item.Text == "Ajouter une vague")
+            {
+                if (patternList.SelectedNode.Parent == null)
+                {
+                    currentLevel.getPattern(patternList.SelectedNode.Index).addWave(new Wave());
+                }
+                else
+                {
+                    currentLevel.getPattern(patternList.SelectedNode.Parent.Index).addWave(new Wave());
+                }
+            }
+            else if (item.Text == "Ajouter un pattern")
+            {
+                currentLevel.addPattern(new Pattern());
+            }
+            else if (item.Text == "Supprimer la vague")
+            {
+                currentLevel.getPattern(patternList.SelectedNode.Parent.Index).removeWave(patternList.SelectedNode.Index);
+            }
+            else if (item.Text == "Supprimer le pattern")
+            {
+                currentLevel.removePattern(patternList.SelectedNode.Index);
+            }
+            refreshPatternList();
+           
+        }
+
+        private void refreshPatternList()
+        {
+            //On refresh la liste
+            patternList.Nodes.Clear();
+            List<String> patternNames;
+            patternNames = currentLevel.getPatternNames();
+            for (int i = 0; i < patternNames.Count; i++)
+            {
+                patternList.Nodes.Add(patternNames[i]);
+            }
+            List<Pattern> patterns = currentLevel.getPatterns();
+            for (int i = 0; i < patterns.Count; i++)
+            {
+                List<Wave> waveList = patterns[i].getPatternWaves();
+                for (int j = 0; j < waveList.Count; j++)
+                {
+                    patternList.Nodes[i].Nodes.Add("Vague " + (j + 1));
+                }
             }
         }
     }

@@ -53,9 +53,15 @@
             openLevelButton = new Button();
             createLevelButton = new Button();
             openFileDialog1 = new OpenFileDialog();
+            contextMenuPattern = new ContextMenuStrip(components);
+            ajouterUnPatternToolStripMenuItem = new ToolStripMenuItem();
+            ajouterUneVagueToolStripMenuItem = new ToolStripMenuItem();
+            supprimerLePatternToolStripMenuItem = new ToolStripMenuItem();
+            supprimerLaVagueToolStripMenuItem = new ToolStripMenuItem();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             propertiesPanel.SuspendLayout();
+            contextMenuPattern.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -128,6 +134,8 @@
             patternList.TabIndex = 9;
             patternList.Visible = false;
             patternList.AfterSelect += patternList_AfterSelect;
+            patternList.NodeMouseClick += patternList_NodeMouseClick;
+            patternList.MouseUp += patternList_MouseClick;
             // 
             // propertiesPanel
             // 
@@ -156,6 +164,7 @@
             modifyPropertyButton.TabIndex = 11;
             modifyPropertyButton.Text = "Modifier";
             modifyPropertyButton.UseVisualStyleBackColor = true;
+            modifyPropertyButton.Visible = false;
             // 
             // fourthPropertiesName
             // 
@@ -261,6 +270,7 @@
             levelName.TabIndex = 5;
             levelName.Text = "Pas de niveau sélectionné";
             levelName.Click += label2_Click;
+            levelName.MouseClick += label2_MouseClick;
             // 
             // saveButton
             // 
@@ -297,6 +307,43 @@
             // 
             openFileDialog1.FileName = "openFileDialog1";
             // 
+            // contextMenuPattern
+            // 
+            contextMenuPattern.ImageScalingSize = new Size(20, 20);
+            contextMenuPattern.Items.AddRange(new ToolStripItem[] { ajouterUnPatternToolStripMenuItem, ajouterUneVagueToolStripMenuItem, supprimerLePatternToolStripMenuItem, supprimerLaVagueToolStripMenuItem });
+            contextMenuPattern.Name = "contextMenuPattern";
+            contextMenuPattern.Size = new Size(216, 128);
+            contextMenuPattern.Closing += contextMenuPattern_Closing;
+            contextMenuPattern.ItemClicked += contexMenu_ItemClicked;
+            // 
+            // ajouterUnPatternToolStripMenuItem
+            // 
+            ajouterUnPatternToolStripMenuItem.Name = "ajouterUnPatternToolStripMenuItem";
+            ajouterUnPatternToolStripMenuItem.Size = new Size(215, 24);
+            ajouterUnPatternToolStripMenuItem.Text = "Ajouter un pattern";
+            ajouterUnPatternToolStripMenuItem.Visible = false;
+            // 
+            // ajouterUneVagueToolStripMenuItem
+            // 
+            ajouterUneVagueToolStripMenuItem.Name = "ajouterUneVagueToolStripMenuItem";
+            ajouterUneVagueToolStripMenuItem.Size = new Size(215, 24);
+            ajouterUneVagueToolStripMenuItem.Text = "Ajouter une vague";
+            ajouterUneVagueToolStripMenuItem.Visible = false;
+            // 
+            // supprimerLePatternToolStripMenuItem
+            // 
+            supprimerLePatternToolStripMenuItem.Name = "supprimerLePatternToolStripMenuItem";
+            supprimerLePatternToolStripMenuItem.Size = new Size(215, 24);
+            supprimerLePatternToolStripMenuItem.Text = "Supprimer le pattern";
+            supprimerLePatternToolStripMenuItem.Visible = false;
+            // 
+            // supprimerLaVagueToolStripMenuItem
+            // 
+            supprimerLaVagueToolStripMenuItem.Name = "supprimerLaVagueToolStripMenuItem";
+            supprimerLaVagueToolStripMenuItem.Size = new Size(215, 24);
+            supprimerLaVagueToolStripMenuItem.Text = "Supprimer la vague";
+            supprimerLaVagueToolStripMenuItem.Visible = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -317,6 +364,7 @@
             tabPage1.ResumeLayout(false);
             propertiesPanel.ResumeLayout(false);
             propertiesPanel.PerformLayout();
+            contextMenuPattern.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -346,5 +394,10 @@
         private Label secondPropertiesName;
         private Label secondPropertiesContent;
         private TreeView patternList;
+        private ContextMenuStrip contextMenuPattern;
+        private ToolStripMenuItem ajouterUnPatternToolStripMenuItem;
+        private ToolStripMenuItem ajouterUneVagueToolStripMenuItem;
+        private ToolStripMenuItem supprimerLePatternToolStripMenuItem;
+        private ToolStripMenuItem supprimerLaVagueToolStripMenuItem;
     }
 }

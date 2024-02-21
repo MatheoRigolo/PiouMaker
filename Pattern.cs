@@ -13,6 +13,10 @@ namespace PiouMaker
         private int order = -1;
         private bool isRandom = false;
 
+        public Pattern()
+        {
+            patternWaves = new List<Wave>();
+        }
         public Pattern(string nameParam)
         {
             patternName = nameParam;
@@ -62,7 +66,26 @@ namespace PiouMaker
                 {
                     return patternWaves[index];
                 }
-                catch (Exception e)
+                catch (Exception)
+                {
+                    throw new Exception("No wave at selected index : " + index);
+                }
+            }
+            else
+            {
+                throw new Exception("No waves in current pattern");
+            }
+        }
+
+        public void removeWave(int index)
+        {
+            if (patternWaves != null)
+            {
+                try
+                {
+                    patternWaves.RemoveAt(index);
+                }
+                catch (Exception)
                 {
                     throw new Exception("No wave at selected index : " + index);
                 }

@@ -65,7 +65,26 @@ namespace PiouMaker
                 {
                     return levelPatterns[patternIndex];
                 }
-                catch (Exception e)
+                catch (Exception)
+                {
+                    throw new Exception("No pattern at selected index : " + patternIndex);
+                }
+            }
+            else
+            {
+                throw new Exception("No patterns in current level");
+            }
+        }
+
+        public void removePattern(int patternIndex)
+        {
+            if (levelPatterns != null)
+            {
+                try
+                {
+                    levelPatterns.RemoveAt(patternIndex);
+                }
+                catch (Exception)
                 {
                     throw new Exception("No pattern at selected index : " + patternIndex);
                 }

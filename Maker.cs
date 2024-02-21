@@ -10,7 +10,7 @@ namespace PiouMaker
 {
     internal class Maker
     {
-        Level currentLevel;
+        //Level currentLevel;
         public Maker() {
             Form1 mainForm = new Form1();
             Application.Run(mainForm);
