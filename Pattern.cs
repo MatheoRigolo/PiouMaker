@@ -40,6 +40,10 @@ namespace PiouMaker
 
         public void setOrder(int order)
         {
+            if (order < -1)
+            {
+                order = -1;
+            }
             this.order = order;
         }
 
@@ -104,6 +108,43 @@ namespace PiouMaker
         public void addWave(Wave wave)
         {
             patternWaves.Add(wave);
+        }
+
+       public void updatePatternWString(string patternNameParam, string orderParam, string isRandomParam)
+        {
+            if (patternNameParam != "")
+            {
+                patternName = patternNameParam;
+            }
+
+            try
+            {
+                int orderInt = int.Parse(orderParam);
+                if (orderInt < -1)
+                {
+                    throw new Exception();
+                }
+                else
+                {
+                    order = orderInt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            switch (isRandomParam)
+            {
+                case "vrai":
+                    isRandom = true;
+                    break;
+                case "faux":
+                    isRandom = false;
+                    break;
+                default:
+                    throw new Exception();
+            }
         }
     }
 }

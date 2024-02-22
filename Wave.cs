@@ -16,10 +16,26 @@ namespace PiouMaker
             enemyList = new List<Enemy>();
         }
 
-        public void setDuration(int duration) { this.duration = duration; }
+        public void setDuration(int duration) 
+        {
+            if (duration < -1) duration = -1;
+            this.duration = duration; 
+        }
         public int getDuration()
         {
             return duration;
+        }
+
+        public void setDuration(string duration)
+        {
+            try
+            {
+                this.duration = int.Parse(duration);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public void addEnemy(Enemy enemy) {  enemyList.Add(enemy); }

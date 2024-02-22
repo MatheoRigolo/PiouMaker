@@ -124,5 +124,35 @@ namespace PiouMaker
         {
             return isInfinite;
         }
+
+        public void updateLevelWStrings(string levelNameParam, string isInfiniteParam, string isRandomParam)
+        {
+            if (levelNameParam != "") 
+            { 
+                //modifier le nom du niveau + tout ce qui en découle
+            }
+            switch(isRandomParam)
+            {
+                case "vrai":
+                    isRandom = true;
+                    break;
+                case "faux":
+                    isRandom = false;
+                    break;
+                default:
+                    throw new Exception();
+            }
+            switch (isInfiniteParam)
+            {
+                case "vrai":
+                    isInfinite = true;
+                    break;
+                case "faux":
+                    isInfinite = false;
+                    break;
+                default:
+                    throw new Exception();
+            }
+        }
     }
 }
