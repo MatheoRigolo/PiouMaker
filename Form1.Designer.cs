@@ -50,6 +50,7 @@
             ajouterUneVagueToolStripMenuItem = new ToolStripMenuItem();
             supprimerLePatternToolStripMenuItem = new ToolStripMenuItem();
             supprimerLaVagueToolStripMenuItem = new ToolStripMenuItem();
+            supprimerLennemiToolStripMenuItem = new ToolStripMenuItem();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             contextMenuPattern.SuspendLayout();
@@ -88,6 +89,7 @@
             listView1.Size = new Size(728, 80);
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
+            listView1.ItemDrag += ListView1_ItemDrag;
             // 
             // enemies
             // 
@@ -95,7 +97,8 @@
             enemies.ImageStream = (ImageListStreamer)resources.GetObject("enemies.ImageStream");
             enemies.TransparentColor = Color.Transparent;
             enemies.Images.SetKeyName(0, "enemy.png");
-            enemies.Images.SetKeyName(1, "spacecraft_player_1.png");
+            enemies.Images.SetKeyName(1, "lance-bombe.png");
+            enemies.Images.SetKeyName(2, "spacecraft_player_1.png");
             // 
             // tabPage2
             // 
@@ -109,13 +112,18 @@
             // 
             // gamePanel
             // 
+            gamePanel.AllowDrop = true;
             gamePanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            gamePanel.BackColor = Color.Transparent;
             gamePanel.BackgroundImage = Properties.Resources.parallax_mountain_bg;
             gamePanel.BackgroundImageLayout = ImageLayout.Stretch;
             gamePanel.Location = new Point(189, 14);
             gamePanel.Name = "gamePanel";
             gamePanel.Size = new Size(571, 363);
             gamePanel.TabIndex = 2;
+            gamePanel.Visible = false;
+            gamePanel.DragDrop += gamePanel_DragDrop;
+            gamePanel.DragEnter += gamePanel_DragEnter;
             // 
             // patternList
             // 
@@ -209,9 +217,9 @@
             // contextMenuPattern
             // 
             contextMenuPattern.ImageScalingSize = new Size(20, 20);
-            contextMenuPattern.Items.AddRange(new ToolStripItem[] { ajouterUnPatternToolStripMenuItem, ajouterUneVagueToolStripMenuItem, supprimerLePatternToolStripMenuItem, supprimerLaVagueToolStripMenuItem });
+            contextMenuPattern.Items.AddRange(new ToolStripItem[] { ajouterUnPatternToolStripMenuItem, ajouterUneVagueToolStripMenuItem, supprimerLePatternToolStripMenuItem, supprimerLaVagueToolStripMenuItem, supprimerLennemiToolStripMenuItem });
             contextMenuPattern.Name = "contextMenuPattern";
-            contextMenuPattern.Size = new Size(216, 100);
+            contextMenuPattern.Size = new Size(216, 152);
             contextMenuPattern.Closing += contextMenuPattern_Closing;
             contextMenuPattern.ItemClicked += contexMenu_ItemClicked;
             // 
@@ -243,8 +251,16 @@
             supprimerLaVagueToolStripMenuItem.Text = "Supprimer la vague";
             supprimerLaVagueToolStripMenuItem.Visible = false;
             // 
+            // supprimerLennemiToolStripMenuItem
+            // 
+            supprimerLennemiToolStripMenuItem.Name = "supprimerLennemiToolStripMenuItem";
+            supprimerLennemiToolStripMenuItem.Size = new Size(215, 24);
+            supprimerLennemiToolStripMenuItem.Text = "Supprimer l'ennemi";
+            supprimerLennemiToolStripMenuItem.Visible = false;
+            // 
             // Form1
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1019, 520);
@@ -291,5 +307,6 @@
         private ToolStripMenuItem ajouterUneVagueToolStripMenuItem;
         private ToolStripMenuItem supprimerLePatternToolStripMenuItem;
         private ToolStripMenuItem supprimerLaVagueToolStripMenuItem;
+        private ToolStripMenuItem supprimerLennemiToolStripMenuItem;
     }
 }

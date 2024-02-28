@@ -45,5 +45,29 @@ namespace PiouMaker
         }
 
         public List<Enemy> getEnemyList() {  return enemyList; }
+
+        public Enemy getEnemy (int index)
+        {
+            return enemyList[index];
+        }
+
+        public void removeEnemy(int index)
+        {
+            if (enemyList != null)
+            {
+                try
+                {
+                    enemyList.RemoveAt(index);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("No enemy at selected index : " + index);
+                }
+            }
+            else
+            {
+                throw new Exception("No enemies in current pattern");
+            }
+        }
     }
 }
