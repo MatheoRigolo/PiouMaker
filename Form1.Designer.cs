@@ -36,6 +36,7 @@
             enemies = new ImageList(components);
             tabPage2 = new TabPage();
             gamePanel = new Panel();
+            gameBackground = new PictureBox();
             patternList = new TreeView();
             propertiesPanel = new Panel();
             modifyPropertyButton = new Button();
@@ -53,6 +54,8 @@
             supprimerLennemiToolStripMenuItem = new ToolStripMenuItem();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
+            gamePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)gameBackground).BeginInit();
             contextMenuPattern.SuspendLayout();
             SuspendLayout();
             // 
@@ -115,8 +118,8 @@
             gamePanel.AllowDrop = true;
             gamePanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gamePanel.BackColor = Color.Transparent;
-            gamePanel.BackgroundImage = Properties.Resources.parallax_mountain_bg;
             gamePanel.BackgroundImageLayout = ImageLayout.Stretch;
+            gamePanel.Controls.Add(gameBackground);
             gamePanel.Location = new Point(189, 14);
             gamePanel.Name = "gamePanel";
             gamePanel.Size = new Size(571, 363);
@@ -124,6 +127,17 @@
             gamePanel.Visible = false;
             gamePanel.DragDrop += gamePanel_DragDrop;
             gamePanel.DragEnter += gamePanel_DragEnter;
+            // 
+            // gameBackground
+            // 
+            gameBackground.BackgroundImage = Properties.Resources.parallax_mountain_bg;
+            gameBackground.BackgroundImageLayout = ImageLayout.Stretch;
+            gameBackground.Dock = DockStyle.Fill;
+            gameBackground.Location = new Point(0, 0);
+            gameBackground.Name = "gameBackground";
+            gameBackground.Size = new Size(571, 363);
+            gameBackground.TabIndex = 0;
+            gameBackground.TabStop = false;
             // 
             // patternList
             // 
@@ -219,7 +233,7 @@
             contextMenuPattern.ImageScalingSize = new Size(20, 20);
             contextMenuPattern.Items.AddRange(new ToolStripItem[] { ajouterUnPatternToolStripMenuItem, ajouterUneVagueToolStripMenuItem, supprimerLePatternToolStripMenuItem, supprimerLaVagueToolStripMenuItem, supprimerLennemiToolStripMenuItem });
             contextMenuPattern.Name = "contextMenuPattern";
-            contextMenuPattern.Size = new Size(216, 152);
+            contextMenuPattern.Size = new Size(216, 124);
             contextMenuPattern.Closing += contextMenuPattern_Closing;
             contextMenuPattern.ItemClicked += contexMenu_ItemClicked;
             // 
@@ -279,6 +293,8 @@
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
+            gamePanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)gameBackground).EndInit();
             contextMenuPattern.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -308,5 +324,6 @@
         private ToolStripMenuItem supprimerLePatternToolStripMenuItem;
         private ToolStripMenuItem supprimerLaVagueToolStripMenuItem;
         private ToolStripMenuItem supprimerLennemiToolStripMenuItem;
+        private PictureBox gameBackground;
     }
 }

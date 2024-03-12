@@ -161,6 +161,19 @@ namespace PiouMaker
                         xmlWriter.WriteAttributeString("type", currentEnemy.getEnemyType());
                         string posString = currentEnemy.getPos().X + ";" + currentEnemy.getPos().Y;
                         xmlWriter.WriteAttributeString("pos", posString);
+                        if (currentEnemy.AutoAim)
+                        {
+                            xmlWriter.WriteAttributeString("autoAim", "true");
+                        }
+                        xmlWriter.WriteAttributeString("damage", currentEnemy.Damage.ToString());
+                        xmlWriter.WriteAttributeString("damagePerBullet", currentEnemy.DamagePerBullet.ToString());
+                        xmlWriter.WriteAttributeString("attackSpeed", currentEnemy.AttackSpeed.ToString());
+                        xmlWriter.WriteAttributeString("bulletSpeed", currentEnemy.BulletSpeed.ToString());
+                        xmlWriter.WriteAttributeString("health", currentEnemy.Health.ToString());
+                        xmlWriter.WriteAttributeString("scoreGived", currentEnemy.ScoreGived.ToString());
+                        xmlWriter.WriteAttributeString("moveSpeed", currentEnemy.MoveSpeed.ToString());
+                        xmlWriter.WriteAttributeString("apparitionDirection", currentEnemy.ApparitionDirection);
+                        xmlWriter.WriteAttributeString("direction", currentEnemy.Direction.X + ";" + currentEnemy.Direction.Y);
                         xmlWriter.WriteEndElement();
                     }
                     xmlWriter.WriteEndElement();
@@ -170,6 +183,7 @@ namespace PiouMaker
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndDocument();
             xmlWriter.Close();
+            xmlWriter.Dispose();
         }
     }
 }

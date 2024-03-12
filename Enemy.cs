@@ -9,9 +9,38 @@ namespace PiouMaker
 {
     public class Enemy
     {
+        /// <summary>
+        /// possibilities : roamingEnemy, shootingEnemy, bomber, rusher
+        /// </summary>
         private string enemyType = "roamingEnemy";
         private Vector2 pos = new Vector2(0,0);
         private int spawnTime = 0;
+
+        private bool autoAim = false;
+        private int damage = 3;
+        private int damagePerBullet = 5;
+        private float attackSpeed = 8f;
+        private float bulletSpeed = 2f;
+        private int health = 20;
+        private int scoreGived = 10;
+        private float moveSpeed = 0.5f;
+
+        /// <summary>
+        /// Valeures possibles : droite, gauche, haut, bas
+        /// </summary>
+        private string apparitionDirection = "droite";
+        private Vector2 direction = new Vector2(-1,0);
+
+        public bool AutoAim { get => autoAim; set => autoAim = value; }
+        public int Damage { get => damage; set => damage = value; }
+        public int DamagePerBullet { get => damagePerBullet; set => damagePerBullet = value; }
+        public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
+        public float BulletSpeed { get => bulletSpeed; set => bulletSpeed = value; }
+        public int Health { get => health; set => health = value; }
+        public int ScoreGived { get => scoreGived; set => scoreGived = value; }
+        public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+        public string ApparitionDirection { get => apparitionDirection; set => apparitionDirection = value; }
+        public Vector2 Direction { get => direction; set => direction = value; }
 
         public Enemy(string enemyType)
         {
