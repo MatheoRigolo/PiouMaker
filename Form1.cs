@@ -6,12 +6,14 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using System.Xml;
+using PiouMaker.Properties;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ComboBox = System.Windows.Forms.ComboBox;
 using TextBox = System.Windows.Forms.TextBox;
@@ -100,18 +102,18 @@ namespace PiouMaker
                 //on afficher la liste des patterns
                 patternList.Visible = true;
 
-                Stream fileStream = openFileDialog1.OpenFile();
-                xmlManager = new XMLManager(currentLevel, fileStream);
+                //Stream fileStream = openFileDialog1.OpenFile();
+                xmlManager = new XMLManager(currentLevel);
+                xmlManager.initLevel();
 
                 refreshPatternList();
-                fileStream.Close();
             }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             //Truc de la validation
-            xmlManager.saveLevel(currentLevel);
+            xmlManager.saveLevel();
             string message = "Fichier correctement modifié";
             string title = "Validation";
             MessageBoxButtons buttons = MessageBoxButtons.OK;
@@ -141,6 +143,9 @@ namespace PiouMaker
                 createLevelButton.Visible = false;
                 //on afficher la liste des patterns
                 patternList.Visible = true;
+
+                xmlManager = new XMLManager(currentLevel);
+                xmlManager.saveLevel();
             }
         }
 
@@ -170,12 +175,23 @@ namespace PiouMaker
                 gamePanel.Visible = true;
 
                 //Il faut afficher les ennemis
-                for (int i=0; i<waveSelected.getEnemyList().Count; i++)
+                for (int i = 0; i < waveSelected.getEnemyList().Count; i++)
                 {
                     //Afficher l'ennemi
                     PictureBox enemybox = new PictureBox();
                     enemybox.BackColor = Color.Transparent;
-                    enemybox.Image = enemies.Images[1];
+                    switch (waveSelected.getEnemyList()[i].getEnemyType())
+                    {
+                        case "bomber":
+                            enemybox.Image = enemies.Images[1];
+                            break;
+                        case "shootingEnemy":
+                            enemybox.Image = enemies.Images[2];
+                            break;
+                        default:
+                            enemybox.Image = enemies.Images[0];
+                            break;
+                    }
                     enemybox.SizeMode = PictureBoxSizeMode.AutoSize;
                     enemybox.Location = new Point((int)(gamePanel.Width * (waveSelected.getEnemy(i).getPos().X / 100f) - (float)enemybox.Width / 2f), (int)(gamePanel.Height * (waveSelected.getEnemy(i).getPos().Y / 100f) - (float)enemybox.Height / 2f));
                     enemybox.Cursor = Cursors.Hand;
@@ -188,7 +204,7 @@ namespace PiouMaker
 
                     enemyPicures.Add(enemybox);
                     gamePanel.Controls.Add(enemybox);
-                    gamePanel.Controls[gamePanel.Controls.Count-1].BringToFront();
+                    gamePanel.Controls[gamePanel.Controls.Count - 1].BringToFront();
                 }
             }
             refreshProperties();
@@ -338,7 +354,7 @@ namespace PiouMaker
                 property4.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property4);
             }
-            else if(!isLevelProperties && patternList.SelectedNode != null && patternList.SelectedNode.Parent != null && selectedEnemy == null)
+            else if (!isLevelProperties && patternList.SelectedNode != null && patternList.SelectedNode.Parent != null && selectedEnemy == null)
             {
                 // Proprétés d'une wave
                 addProperty("Durée :", waveSelected.getDuration().ToString());
@@ -410,7 +426,7 @@ namespace PiouMaker
                 property4.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property4);
             }
-            else if(selectedEnemy != null)
+            else if (selectedEnemy != null)
             {
                 // proprétés d'un ennemi
 
@@ -422,7 +438,7 @@ namespace PiouMaker
                 comboBox1.Items.Add("shooting enemy");
                 comboBox1.Items.Add("rusher");
                 comboBox1.Items.Add("bomber");
-                switch(selectedEnemy.getEnemyType())
+                switch (selectedEnemy.getEnemyType())
                 {
                     case "roamingEnemy":
                         comboBox1.SelectedIndex = 0;
@@ -437,6 +453,7 @@ namespace PiouMaker
                         comboBox1.SelectedIndex = 3;
                         break;
                 }
+                comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
                 property1.setControl(comboBox1);
                 property1.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property1);
@@ -504,6 +521,8 @@ namespace PiouMaker
                 propertiesPanel.Controls.Add(properties[i].getControl());
             }
         }
+
+        
 
         private void initProperties()
         {
@@ -650,7 +669,7 @@ namespace PiouMaker
                 SizeMode = PictureBoxSizeMode.AutoSize,
                 BackColor = Color.Transparent,
                 Cursor = Cursors.Hand
-        };
+            };
 
             // On ajoute les controleurs pour les bouger
             pictureBox.MouseDown += PictureBox1_MouseDown;
@@ -665,6 +684,18 @@ namespace PiouMaker
             int X = (int)((float)(panelLocation.X + pictureBox.Size.Width / 2) / (float)gamePanel.Size.Width * 100);
             int Y = (int)((float)(panelLocation.Y + pictureBox.Size.Width / 2) / (float)gamePanel.Size.Height * 100);
             newEnemy.setPos(X, Y);
+            switch (draggedItem.ImageIndex)
+            {
+                case 1:
+                    newEnemy.setEnemyType("bomber");
+                    break;
+                case 2:
+                    newEnemy.setEnemyType("shootingEnemy");
+                    break;
+                default:
+                    newEnemy.setEnemyType("roamingEnemy");
+                    break;
+            }
             waveSelected.addEnemy(newEnemy);
             gamePanel.Controls.Add(pictureBox);
             gamePanel.Controls[gamePanel.Controls.Count - 1].BringToFront();
@@ -687,7 +718,7 @@ namespace PiouMaker
                 contextMenuPattern.Items[4].Visible = true;
                 contextMenuPattern.Show(sender as PictureBox, e.Location);
             }
-            else if(e.Button == MouseButtons.Left)
+            else if (e.Button == MouseButtons.Left)
             {
                 var c = sender as PictureBox;
                 if (null == c) return;
@@ -710,6 +741,36 @@ namespace PiouMaker
             property.setControl(textBox);
             property.setPos(propertiesPanel.DisplayRectangle, properties.Count);
             properties.Add(property);
+        }
+        private void ComboBox1_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (selectedEnemy != null)
+            {
+                int index = waveSelected.getEnemyList().IndexOf(selectedEnemy);
+                string newType = properties[0].getControl().Text;
+                switch (newType)
+                {
+                    case "bomber":
+                        enemyPicures[index].Image = enemies.Images[1];
+                        selectedEnemy.setEnemyType("bomber");
+                        break;
+                    case "shooting enemy":
+                        enemyPicures[index].Image = enemies.Images[2];
+                        selectedEnemy.setEnemyType("shootingEnemy");
+                        break;
+                    case "roaming enemy":
+                        enemyPicures[index].Image = enemies.Images[0];
+                        selectedEnemy.setEnemyType("roamingEnemy");
+                        break;
+                    case "rusher":
+                        enemyPicures[index].Image = enemies.Images[0];
+                        selectedEnemy.setEnemyType("rusher");
+                        break;
+                    default:
+                        enemyPicures[index].Image = enemies.Images[0];
+                        break;
+                }
+            }
         }
     }
 }

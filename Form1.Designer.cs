@@ -101,7 +101,7 @@
             enemies.TransparentColor = Color.Transparent;
             enemies.Images.SetKeyName(0, "enemy.png");
             enemies.Images.SetKeyName(1, "lance-bombe.png");
-            enemies.Images.SetKeyName(2, "spacecraft_player_1.png");
+            enemies.Images.SetKeyName(2, "shootingEnemySolo.png");
             // 
             // tabPage2
             // 
@@ -288,6 +288,7 @@
             Controls.Add(gamePanel);
             Controls.Add(tabControl1);
             Controls.Add(label1);
+            DoubleBuffered = true;
             Name = "Form1";
             Text = "PiouMaker";
             Load += Form1_Load;

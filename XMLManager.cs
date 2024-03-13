@@ -13,26 +13,23 @@ namespace PiouMaker
     internal class XMLManager
     {
         private Level level;
-        private Stream file;
 
-        public XMLManager(Level level, Stream file)
+        public XMLManager(Level level)
         {
             this.level = level;
-            this.file = file;
-            initLevel();
+            //initLevel();
         }
 
-        private void initLevel()
+        public void initLevel()
         {
-            var fileContent = string.Empty;
 
-            using (StreamReader fileReader = new StreamReader(level.getFilePath()))
-            {
-                fileContent = fileReader.ReadToEnd();
-            }
+            StreamReader fileReader = new StreamReader(level.getFilePath());
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(file);
+            xDoc.Load(fileReader);
+
+            fileReader.Close();
+            fileReader.Dispose();
 
             // Récupérer tous les niveaux
             XmlNodeList levelNodes = xDoc.SelectNodes("//level");
@@ -86,13 +83,65 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["pos"] != null)
                             {
-                                String pos = enemyNode.Attributes["pos"].Value;
-                                String[] elements = pos.Split(";");
-                                enemyToAdd.setPos(int.Parse(elements[0]), int.Parse(elements[1]));
+                                string pos = enemyNode.Attributes["pos"].Value;
+                                string[] elements = pos.Split(";");
+                                // Ici, c'est des 50%, a revoir
+                                string X;
+                                string Y;
+                                string[] posXParsed = elements[0].Split("%");
+                                X = posXParsed[0];
+                                string[] posYParsed = elements[1].Split("%");
+                                Y = posYParsed[0];
+                                enemyToAdd.setPos(int.Parse(X), int.Parse(Y));
                             }
                             if (enemyNode.Attributes["spawnTime"] != null)
                             {
                                 enemyToAdd.setSpawnTime(int.Parse(enemyNode.Attributes["spawnTime"].Value));
+                            }
+                            // Lire le reste des attributs
+                            if (enemyNode.Attributes["autoAim"] != null)
+                            {
+                                switch(enemyNode.Attributes["spawnTime"].Value)
+                                {
+                                    case "true":
+                                        enemyToAdd.AutoAim = true; 
+                                        break;
+                                    default:
+                                        enemyToAdd.AutoAim = false;
+                                        break;
+                                }
+                            }
+                            if (enemyNode.Attributes["damage"] != null)
+                            {
+                                enemyToAdd.Damage = int.Parse(enemyNode.Attributes["damage"].Value);
+                            }
+                            if (enemyNode.Attributes["damagePerBullet"] != null)
+                            {
+                                enemyToAdd.DamagePerBullet = int.Parse(enemyNode.Attributes["damagePerBullet"].Value);
+                            }
+                            if (enemyNode.Attributes["attackSpeed"] != null)
+                            {
+                                enemyToAdd.AttackSpeed = float.Parse(enemyNode.Attributes["attackSpeed"].Value);
+                            }
+                            if (enemyNode.Attributes["bulletSpeed"] != null)
+                            {
+                                enemyToAdd.BulletSpeed = float.Parse(enemyNode.Attributes["bulletSpeed"].Value);
+                            }
+                            if (enemyNode.Attributes["health"] != null)
+                            {
+                                enemyToAdd.Health = int.Parse(enemyNode.Attributes["health"].Value);
+                            }
+                            if (enemyNode.Attributes["scoreGived"] != null)
+                            {
+                                enemyToAdd.ScoreGived = int.Parse(enemyNode.Attributes["scoreGived"].Value);
+                            }
+                            if (enemyNode.Attributes["moveSpeed"] != null)
+                            {
+                                enemyToAdd.MoveSpeed = float.Parse(enemyNode.Attributes["moveSpeed"].Value);
+                            }
+                            if (enemyNode.Attributes["apparitionDirection"] != null)
+                            {
+                                enemyToAdd.ApparitionDirection = enemyNode.Attributes["apparitionDirection"].Value;
                             }
                             waveToadd.addEnemy(enemyToAdd);
                         }
@@ -103,12 +152,12 @@ namespace PiouMaker
             }
         }
 
-        public void saveLevel(Level currentLevel)
+        public void saveLevel()
         {
-            XmlWriter xmlWriter = XmlWriter.Create(currentLevel.getFilePath());
+            XmlWriter xmlWriter = XmlWriter.Create(level.getFilePath());
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("level");
-            if (currentLevel.getIsRandom())
+            if (level.getIsRandom())
             {
                 xmlWriter.WriteAttributeString("isRandom", "1");
             }
@@ -116,7 +165,7 @@ namespace PiouMaker
             {
                 xmlWriter.WriteAttributeString("isRandom", "0");
             }
-            if (currentLevel.getIsInfinite())
+            if (level.getIsInfinite())
             {
                 xmlWriter.WriteAttributeString("isInfinite", "1");
             }
@@ -125,9 +174,9 @@ namespace PiouMaker
                 xmlWriter.WriteAttributeString("isInfinite", "0");
             }
 
-            for (int i = 0; i < currentLevel.getPatterns().Count; i++)
+            for (int i = 0; i < level.getPatterns().Count; i++)
             {
-                Pattern currentPattern = currentLevel.getPatterns()[i];
+                Pattern currentPattern = level.getPatterns()[i];
                 xmlWriter.WriteStartElement("pattern");
                 xmlWriter.WriteAttributeString("name", currentPattern.getPatternName());
                 if (currentPattern.getIsRandom())
@@ -159,7 +208,7 @@ namespace PiouMaker
                             xmlWriter.WriteAttributeString("spawnTime", currentEnemy.getSpawnTime().ToString());
                         }
                         xmlWriter.WriteAttributeString("type", currentEnemy.getEnemyType());
-                        string posString = currentEnemy.getPos().X + ";" + currentEnemy.getPos().Y;
+                        string posString = currentEnemy.getPos().X + "%;" + currentEnemy.getPos().Y+"%";
                         xmlWriter.WriteAttributeString("pos", posString);
                         if (currentEnemy.AutoAim)
                         {
