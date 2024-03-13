@@ -441,7 +441,7 @@ namespace PiouMaker
                 property1.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property1);
 
-                addProperty("délai d'apparition :", selectedEnemy.getSpawnTime().ToString());
+                addProperty("Délai d'apparition :", selectedEnemy.getSpawnTime().ToString());
 
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Auto Aim :");
@@ -461,7 +461,6 @@ namespace PiouMaker
                 property3.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property3);
 
-                addProperty("Délai d'apparition :", selectedEnemy.getSpawnTime().ToString());
                 addProperty("Dégats :", selectedEnemy.Damage.ToString());
                 addProperty("Dégats par balle :", selectedEnemy.DamagePerBullet.ToString());
                 addProperty("Vitesse d'attaque :", selectedEnemy.AttackSpeed.ToString());
@@ -524,14 +523,59 @@ namespace PiouMaker
                 {
                     //on a les propriétés d'un pattern
                     currentLevel.getPattern(patternList.SelectedNode.Index).updatePatternWString(properties[0].getControl().Text, properties[1].getControl().Text, properties[2].getControl().Text);
+                    refreshPatternList();
                 }
                 else if (properties.Count == 2 && properties[1].getLabel().Text == "Nombre d'ennemis :")
                 {
                     //on a les propriétés d'une wave
                     currentLevel.getPattern(patternList.SelectedNode.Parent.Index).getWave(patternList.SelectedNode.Index).setDuration(properties[0].getControl().Text);
+                    refreshPatternList();
+                }
+                else if (properties.Count > 0 && selectedEnemy != null)
+                {
+                    // On modifie les proprétés d'un ennemi
+                    string typeText = properties[0].getControl().Text;
+                    string enemyType = "";
+                    switch (typeText)
+                    {
+                        case "roaming enemy":
+                            enemyType = "roamingEnemy";
+                            break;
+                        case "shooting enemy":
+                            enemyType = "shootingEnemy";
+                            break;
+                        case "rusher":
+                            enemyType = typeText;
+                            break;
+                        case "bomber":
+                            enemyType = typeText; ;
+                            break;
+                    }
+                    selectedEnemy.setEnemyType(enemyType);
+
+                    selectedEnemy.setSpawnTime(int.Parse(properties[1].getControl().Text));
+
+                    switch (properties[2].getControl().Text)
+                    {
+                        case "Vrai":
+                            selectedEnemy.AutoAim = true;
+                            break;
+                        case "Faux":
+                            selectedEnemy.AutoAim = false;
+                            break;
+                    }
+
+                    selectedEnemy.Damage = int.Parse(properties[3].getControl().Text);
+                    selectedEnemy.DamagePerBullet = int.Parse(properties[4].getControl().Text);
+                    selectedEnemy.AttackSpeed = float.Parse(properties[5].getControl().Text);
+                    selectedEnemy.BulletSpeed = float.Parse(properties[6].getControl().Text);
+                    selectedEnemy.Health = int.Parse(properties[7].getControl().Text);
+                    selectedEnemy.ScoreGived = int.Parse(properties[8].getControl().Text);
+                    selectedEnemy.MoveSpeed = float.Parse(properties[9].getControl().Text);
+
+                    selectedEnemy.ApparitionDirection = properties[10].getControl().Text;
                 }
                 refreshProperties();
-                refreshPatternList();
             }
             catch (Exception ex)
             {
@@ -551,7 +595,7 @@ namespace PiouMaker
                 originalImageLocation = e.Location;
 
                 var pictureBoxMoved = (PictureBox)sender;
-                selectedEnemy = waveSelected.getEnemy(enemyPicures.IndexOf(pictureBoxMoved));
+                //selectedEnemy = waveSelected.getEnemy(enemyPicures.IndexOf(pictureBoxMoved));
             }
         }
 
@@ -648,9 +692,12 @@ namespace PiouMaker
                 var c = sender as PictureBox;
                 if (null == c) return;
                 int index = enemyPicures.IndexOf(c);
-                selectedEnemy = waveSelected.getEnemy(index);
-                // On affiche les propriétés de l'ennemi
-                refreshProperties();
+                if (selectedEnemy == null || index != waveSelected.getEnemyList().IndexOf(selectedEnemy))
+                {
+                    selectedEnemy = waveSelected.getEnemy(index);
+                    // On affiche les propriétés de l'ennemi
+                    refreshProperties();
+                }
             }
         }
 
