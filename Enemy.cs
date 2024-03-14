@@ -31,6 +31,8 @@ namespace PiouMaker
         private string apparitionDirection = "droite";
         private Vector2 direction = new Vector2(-1,0);
 
+        private int xpGived = 4;
+
         public bool AutoAim { get => autoAim; set => autoAim = value; }
         public int Damage { get => damage; set => damage = value; }
         public int DamagePerBullet { get => damagePerBullet; set => damagePerBullet = value; }
@@ -41,6 +43,7 @@ namespace PiouMaker
         public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
         public string ApparitionDirection { get => apparitionDirection; set => apparitionDirection = value; }
         public Vector2 Direction { get => direction; set => direction = value; }
+        public int XpGived { get => xpGived; set => xpGived = value; }
 
         public Enemy(string enemyType)
         {

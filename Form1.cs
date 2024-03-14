@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -65,6 +66,7 @@ namespace PiouMaker
         {
             if (currentLevel != null)
             {
+                modifyPropertyButton.Visible = true;
                 refreshProperties(true);
             }
         }
@@ -96,8 +98,6 @@ namespace PiouMaker
 
                 //on enleve les buttons pour charger un niveau
                 openLevelButton.Visible = false;
-                openLevelButton.Enabled = false;
-                createLevelButton.Enabled = false;
                 createLevelButton.Visible = false;
                 //on afficher la liste des patterns
                 patternList.Visible = true;
@@ -138,8 +138,6 @@ namespace PiouMaker
 
                 //on enleve les buttons pour charger un niveau
                 openLevelButton.Visible = false;
-                openLevelButton.Enabled = false;
-                createLevelButton.Enabled = false;
                 createLevelButton.Visible = false;
                 //on afficher la liste des patterns
                 patternList.Visible = true;
@@ -480,11 +478,11 @@ namespace PiouMaker
 
                 addProperty("Dégats :", selectedEnemy.Damage.ToString());
                 addProperty("Dégats par balle :", selectedEnemy.DamagePerBullet.ToString());
-                addProperty("Vitesse d'attaque :", selectedEnemy.AttackSpeed.ToString());
-                addProperty("Vitesse des balles :", selectedEnemy.BulletSpeed.ToString());
+                addProperty("Vitesse d'attaque :", selectedEnemy.AttackSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                addProperty("Vitesse des balles :", selectedEnemy.BulletSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
                 addProperty("Points de vie :", selectedEnemy.Health.ToString());
                 addProperty("Score gagné :", selectedEnemy.ScoreGived.ToString());
-                addProperty("Vitesse de déplacement :", selectedEnemy.MoveSpeed.ToString());
+                addProperty("Vitesse de déplacement :", selectedEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
                 PropertyView property2 = new PropertyView();
                 property2.setPanelString("Côté d'apparition :");
@@ -512,6 +510,8 @@ namespace PiouMaker
                 property2.setControl(comboBox2);
                 property2.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property2);
+
+                addProperty("xp donnée :", selectedEnemy.XpGived.ToString());
             }
 
             propertiesPanel.Controls.Clear();
@@ -522,7 +522,7 @@ namespace PiouMaker
             }
         }
 
-        
+
 
         private void initProperties()
         {
@@ -537,6 +537,26 @@ namespace PiouMaker
                 {
                     //on a les propriétés d'un niveau
                     currentLevel.updateLevelWStrings(properties[0].getControl().Text, properties[1].getControl().Text, properties[2].getControl().Text);
+
+                    // On modifie le nom du niveau
+                    string src = currentLevel.getFilePath();
+
+
+                    string dest = src.Substring(0, src.LastIndexOf("\\") + 1);
+
+                    currentLevel.setLevelName(properties[0].getControl().Text);
+                    dest += currentLevel.getLevelName() + ".piou";
+                    currentLevel.setFilePath(dest);
+
+                    File.Move(src, dest, false);
+
+                    string[] names = currentLevel.getFilePath().Split(new char[] { '\\' });
+                    string[] autre = names[names.Length - 1].Split(".piou");
+                    levelName.Text = autre[autre.Length - 2];
+                    currentLevel.setLevelName(levelName.Text);
+
+                    refreshPatternList();
+                    refreshProperties(true);
                 }
                 else if (properties.Count == 4 && properties[0].getLabel().Text == "Nom du pattern :")
                 {
@@ -586,13 +606,14 @@ namespace PiouMaker
 
                     selectedEnemy.Damage = int.Parse(properties[3].getControl().Text);
                     selectedEnemy.DamagePerBullet = int.Parse(properties[4].getControl().Text);
-                    selectedEnemy.AttackSpeed = float.Parse(properties[5].getControl().Text);
-                    selectedEnemy.BulletSpeed = float.Parse(properties[6].getControl().Text);
+                    selectedEnemy.AttackSpeed = float.Parse(properties[5].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    selectedEnemy.BulletSpeed = float.Parse(properties[6].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
                     selectedEnemy.Health = int.Parse(properties[7].getControl().Text);
                     selectedEnemy.ScoreGived = int.Parse(properties[8].getControl().Text);
-                    selectedEnemy.MoveSpeed = float.Parse(properties[9].getControl().Text);
+                    selectedEnemy.MoveSpeed = float.Parse(properties[9].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
 
                     selectedEnemy.ApparitionDirection = properties[10].getControl().Text;
+                    selectedEnemy.XpGived = int.Parse(properties[11].getControl().Text);
                 }
                 refreshProperties();
             }
@@ -771,6 +792,13 @@ namespace PiouMaker
                         break;
                 }
             }
+        }
+
+        private void ouvrirUnNiveauToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openLevelButton.Visible = true;
+            openLevelButton.PerformClick();
+            openLevelButton.Visible = false;
         }
     }
 }

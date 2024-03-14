@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -101,9 +102,9 @@ namespace PiouMaker
                             // Lire le reste des attributs
                             if (enemyNode.Attributes["autoAim"] != null)
                             {
-                                switch(enemyNode.Attributes["spawnTime"].Value)
+                                switch(enemyNode.Attributes["autoAim"].Value)
                                 {
-                                    case "true":
+                                    case "1":
                                         enemyToAdd.AutoAim = true; 
                                         break;
                                     default:
@@ -121,11 +122,11 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["attackSpeed"] != null)
                             {
-                                enemyToAdd.AttackSpeed = float.Parse(enemyNode.Attributes["attackSpeed"].Value);
+                                enemyToAdd.AttackSpeed = float.Parse(enemyNode.Attributes["attackSpeed"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             if (enemyNode.Attributes["bulletSpeed"] != null)
                             {
-                                enemyToAdd.BulletSpeed = float.Parse(enemyNode.Attributes["bulletSpeed"].Value);
+                                enemyToAdd.BulletSpeed = float.Parse(enemyNode.Attributes["bulletSpeed"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             if (enemyNode.Attributes["health"] != null)
                             {
@@ -137,11 +138,15 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["moveSpeed"] != null)
                             {
-                                enemyToAdd.MoveSpeed = float.Parse(enemyNode.Attributes["moveSpeed"].Value);
+                                enemyToAdd.MoveSpeed = float.Parse(enemyNode.Attributes["moveSpeed"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             if (enemyNode.Attributes["apparitionDirection"] != null)
                             {
                                 enemyToAdd.ApparitionDirection = enemyNode.Attributes["apparitionDirection"].Value;
+                            }
+                            if (enemyNode.Attributes["xpGived"] != null)
+                            {
+                                enemyToAdd.XpGived = int.Parse(enemyNode.Attributes["xpGived"].Value);
                             }
                             waveToadd.addEnemy(enemyToAdd);
                         }
@@ -212,17 +217,18 @@ namespace PiouMaker
                         xmlWriter.WriteAttributeString("pos", posString);
                         if (currentEnemy.AutoAim)
                         {
-                            xmlWriter.WriteAttributeString("autoAim", "true");
+                            xmlWriter.WriteAttributeString("autoAim", "1");
                         }
                         xmlWriter.WriteAttributeString("damage", currentEnemy.Damage.ToString());
                         xmlWriter.WriteAttributeString("damagePerBullet", currentEnemy.DamagePerBullet.ToString());
-                        xmlWriter.WriteAttributeString("attackSpeed", currentEnemy.AttackSpeed.ToString());
-                        xmlWriter.WriteAttributeString("bulletSpeed", currentEnemy.BulletSpeed.ToString());
+                        xmlWriter.WriteAttributeString("attackSpeed", currentEnemy.AttackSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        xmlWriter.WriteAttributeString("bulletSpeed", currentEnemy.BulletSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         xmlWriter.WriteAttributeString("health", currentEnemy.Health.ToString());
                         xmlWriter.WriteAttributeString("scoreGived", currentEnemy.ScoreGived.ToString());
-                        xmlWriter.WriteAttributeString("moveSpeed", currentEnemy.MoveSpeed.ToString());
+                        xmlWriter.WriteAttributeString("moveSpeed", currentEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         xmlWriter.WriteAttributeString("apparitionDirection", currentEnemy.ApparitionDirection);
                         xmlWriter.WriteAttributeString("direction", currentEnemy.Direction.X + ";" + currentEnemy.Direction.Y);
+                        xmlWriter.WriteAttributeString("xpGived", currentEnemy.XpGived.ToString());
                         xmlWriter.WriteEndElement();
                     }
                     xmlWriter.WriteEndElement();

@@ -52,11 +52,19 @@
             supprimerLePatternToolStripMenuItem = new ToolStripMenuItem();
             supprimerLaVagueToolStripMenuItem = new ToolStripMenuItem();
             supprimerLennemiToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1 = new MenuStrip();
+            fichierToolStripMenuItem = new ToolStripMenuItem();
+            ouvrirUnNiveauToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            créerUnNiveauToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            enregistrerLeNiveauToolStripMenuItem = new ToolStripMenuItem();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             gamePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gameBackground).BeginInit();
             contextMenuPattern.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -141,9 +149,9 @@
             // 
             // patternList
             // 
-            patternList.Location = new Point(12, 74);
+            patternList.Location = new Point(12, 84);
             patternList.Name = "patternList";
-            patternList.Size = new Size(158, 303);
+            patternList.Size = new Size(158, 293);
             patternList.TabIndex = 9;
             patternList.Visible = false;
             patternList.AfterSelect += patternList_AfterSelect;
@@ -155,9 +163,9 @@
             propertiesPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             propertiesPanel.AutoScroll = true;
             propertiesPanel.BackColor = Color.White;
-            propertiesPanel.Location = new Point(791, 41);
+            propertiesPanel.Location = new Point(791, 54);
             propertiesPanel.Name = "propertiesPanel";
-            propertiesPanel.Size = new Size(206, 311);
+            propertiesPanel.Size = new Size(206, 298);
             propertiesPanel.TabIndex = 3;
             // 
             // modifyPropertyButton
@@ -175,7 +183,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline);
-            label1.Location = new Point(849, 14);
+            label1.Location = new Point(850, 28);
             label1.Name = "label1";
             label1.Size = new Size(81, 20);
             label1.TabIndex = 0;
@@ -185,7 +193,7 @@
             // 
             levelName.BorderStyle = BorderStyle.FixedSingle;
             levelName.Cursor = Cursors.Hand;
-            levelName.Location = new Point(12, 14);
+            levelName.Location = new Point(12, 28);
             levelName.Name = "levelName";
             levelName.Size = new Size(158, 46);
             levelName.TabIndex = 5;
@@ -272,12 +280,59 @@
             supprimerLennemiToolStripMenuItem.Text = "Supprimer l'ennemi";
             supprimerLennemiToolStripMenuItem.Visible = false;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fichierToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1019, 28);
+            menuStrip1.TabIndex = 12;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fichierToolStripMenuItem
+            // 
+            fichierToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ouvrirUnNiveauToolStripMenuItem, toolStripSeparator1, créerUnNiveauToolStripMenuItem, toolStripSeparator2, enregistrerLeNiveauToolStripMenuItem });
+            fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
+            fichierToolStripMenuItem.Size = new Size(66, 24);
+            fichierToolStripMenuItem.Text = "Fichier";
+            // 
+            // ouvrirUnNiveauToolStripMenuItem
+            // 
+            ouvrirUnNiveauToolStripMenuItem.Name = "ouvrirUnNiveauToolStripMenuItem";
+            ouvrirUnNiveauToolStripMenuItem.Size = new Size(226, 26);
+            ouvrirUnNiveauToolStripMenuItem.Text = "Ouvrir un niveau";
+            ouvrirUnNiveauToolStripMenuItem.Click += ouvrirUnNiveauToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(223, 6);
+            // 
+            // créerUnNiveauToolStripMenuItem
+            // 
+            créerUnNiveauToolStripMenuItem.Name = "créerUnNiveauToolStripMenuItem";
+            créerUnNiveauToolStripMenuItem.Size = new Size(226, 26);
+            créerUnNiveauToolStripMenuItem.Text = "Créer un niveau";
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(223, 6);
+            // 
+            // enregistrerLeNiveauToolStripMenuItem
+            // 
+            enregistrerLeNiveauToolStripMenuItem.Name = "enregistrerLeNiveauToolStripMenuItem";
+            enregistrerLeNiveauToolStripMenuItem.Size = new Size(226, 26);
+            enregistrerLeNiveauToolStripMenuItem.Text = "Enregistrer le niveau";
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1019, 520);
+            Controls.Add(menuStrip1);
             Controls.Add(modifyPropertyButton);
             Controls.Add(createLevelButton);
             Controls.Add(openLevelButton);
@@ -289,6 +344,7 @@
             Controls.Add(tabControl1);
             Controls.Add(label1);
             DoubleBuffered = true;
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "PiouMaker";
             Load += Form1_Load;
@@ -297,6 +353,8 @@
             gamePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gameBackground).EndInit();
             contextMenuPattern.ResumeLayout(false);
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -326,5 +384,12 @@
         private ToolStripMenuItem supprimerLaVagueToolStripMenuItem;
         private ToolStripMenuItem supprimerLennemiToolStripMenuItem;
         private PictureBox gameBackground;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fichierToolStripMenuItem;
+        private ToolStripMenuItem ouvrirUnNiveauToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem créerUnNiveauToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem enregistrerLeNiveauToolStripMenuItem;
     }
 }
