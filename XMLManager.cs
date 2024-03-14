@@ -13,7 +13,7 @@ namespace PiouMaker
 {
     internal class XMLManager
     {
-        private Level level;
+        public Level level;
 
         public XMLManager(Level level)
         {

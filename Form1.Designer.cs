@@ -314,6 +314,7 @@
             créerUnNiveauToolStripMenuItem.Name = "créerUnNiveauToolStripMenuItem";
             créerUnNiveauToolStripMenuItem.Size = new Size(226, 26);
             créerUnNiveauToolStripMenuItem.Text = "Créer un niveau";
+            créerUnNiveauToolStripMenuItem.Click += créerUnNiveauToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
@@ -325,6 +326,7 @@
             enregistrerLeNiveauToolStripMenuItem.Name = "enregistrerLeNiveauToolStripMenuItem";
             enregistrerLeNiveauToolStripMenuItem.Size = new Size(226, 26);
             enregistrerLeNiveauToolStripMenuItem.Text = "Enregistrer le niveau";
+            enregistrerLeNiveauToolStripMenuItem.Click += enregistrerLeNiveauToolStripMenuItem_Click;
             // 
             // Form1
             // 

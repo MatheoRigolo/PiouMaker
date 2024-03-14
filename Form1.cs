@@ -23,7 +23,7 @@ namespace PiouMaker
 {
     public partial class Form1 : Form
     {
-        Level currentLevel;
+        Level? currentLevel;
         XMLManager xmlManager;
         List<PropertyView> properties;
         Wave waveSelected;
@@ -88,36 +88,104 @@ namespace PiouMaker
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                gamePanel.Visible = false;
+
                 currentLevel = new Level();
                 currentLevel.setFilePath(openFileDialog1.FileName);
                 // cut pour avoir le nom du fichier sans le path
                 string[] names = currentLevel.getFilePath().Split(new char[] { '\\' });
                 string[] autre = names[names.Length - 1].Split(".piou");
-                levelName.Text = autre[autre.Length - 2];
-                currentLevel.setLevelName(levelName.Text);
+                string name = autre[autre.Length - 2];
+                currentLevel.setLevelName(name);
 
-                //on enleve les buttons pour charger un niveau
-                openLevelButton.Visible = false;
-                createLevelButton.Visible = false;
-                //on afficher la liste des patterns
-                patternList.Visible = true;
-
-                //Stream fileStream = openFileDialog1.OpenFile();
                 xmlManager = new XMLManager(currentLevel);
-                xmlManager.initLevel();
+                try
+                {
+                    xmlManager.initLevel();
 
-                refreshPatternList();
+                    levelName.Text = name;
+                    //on enleve les buttons pour charger un niveau
+                    openLevelButton.Visible = false;
+                    createLevelButton.Visible = false;
+                    //on afficher la liste des patterns
+                    patternList.Visible = true;
+
+                    refreshPatternList();
+                }
+                catch (Exception ex)
+                {
+                    currentLevel = null;
+                    string message = "Fichier de niveau non valide : " + ex.Message;
+                    string title = "Erreur";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+                }
             }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             //Truc de la validation
-            xmlManager.saveLevel();
-            string message = "Fichier correctement modifié";
-            string title = "Validation";
-            MessageBoxButtons buttons = MessageBoxButtons.OK;
-            DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+
+            if (currentLevel == null)
+            {
+                string message = "Pas de niveau sélectionné";
+                string title = "Attention";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+            }
+            // savoir si le niveau est faisable (minimum 1 pattern et pas de patterns sans vagues)
+            // on autorise les vagues sans ennemis puisque ce la peut etre une vague de boss
+            else if (currentLevel.getPatterns().Count == 0)
+            {
+                string message = "Niveau non valide : pas de pattern";
+                string title = "Erreur";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Error);
+            }
+            else // tout va bien (pour l'instant)
+            {
+                bool errorInWaves = false;
+                bool errorInOrders = false;
+                List<int> orders = new List<int>();
+                foreach (Pattern pattern in currentLevel.getPatterns())
+                {
+                    if (pattern.getPatternWaves().Count == 0)
+                    {
+                        errorInWaves = true;
+                    }
+                    if (orders.Contains(pattern.getOrder()) && pattern.getOrder() != -1)
+                    {
+                        errorInOrders = true;
+                    }
+                    else
+                    {
+                        orders.Add(pattern.getOrder());
+                    }
+                }
+                if (errorInWaves)
+                {
+                    string message2 = "Niveau non valide : au moins un pattern n'a pas de vagues d'ennemis";
+                    string title2 = "Erreur";
+                    MessageBoxButtons buttons2 = MessageBoxButtons.OK;
+                    DialogResult result2 = MessageBox.Show(message2, title2, buttons2, MessageBoxIcon.Error);
+                }
+                else if (errorInOrders)
+                {
+                    string message2 = "Niveau non valide : Ordres des patterns incohérents";
+                    string title2 = "Erreur";
+                    MessageBoxButtons buttons2 = MessageBoxButtons.OK;
+                    DialogResult result2 = MessageBox.Show(message2, title2, buttons2, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    xmlManager.saveLevel();
+                    string message = "Fichier correctement modifié";
+                    string title = "Validation";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+                }
+            }
         }
 
         private void createLevelButton_Click(object sender, EventArgs e)
@@ -267,6 +335,7 @@ namespace PiouMaker
             else if (item.Text == "Supprimer la vague")
             {
                 currentLevel.getPattern(patternList.SelectedNode.Parent.Index).removeWave(patternList.SelectedNode.Index);
+                gamePanel.Visible = false;
                 refreshPatternList();
             }
             else if (item.Text == "Supprimer le pattern")
@@ -796,9 +865,45 @@ namespace PiouMaker
 
         private void ouvrirUnNiveauToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openLevelButton.Visible = true;
-            openLevelButton.PerformClick();
-            openLevelButton.Visible = false;
+            if (openLevelButton.Visible == false)
+            {
+                Point originalLocation = openLevelButton.Location;
+                openLevelButton.Location = new Point(-openLevelButton.Width, -openLevelButton.Height);
+                openLevelButton.Visible = true;
+                // Déclencher l'événement click
+                openLevelButton.PerformClick();
+                // Restaurer la position d'origine du bouton
+                openLevelButton.Visible = false;
+                openLevelButton.Location = originalLocation;
+            }
+            else
+            {
+                openLevelButton.PerformClick();
+            }
+        }
+
+        private void créerUnNiveauToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (createLevelButton.Visible == false)
+            {
+                Point originalLocation = createLevelButton.Location;
+                createLevelButton.Location = new Point(-openLevelButton.Width, -openLevelButton.Height);
+                createLevelButton.Visible = true;
+                // Déclencher l'événement click
+                createLevelButton.PerformClick();
+                // Restaurer la position d'origine du bouton
+                createLevelButton.Visible = false;
+                createLevelButton.Location = originalLocation;
+            }
+            else
+            {
+                createLevelButton.PerformClick();
+            }
+        }
+
+        private void enregistrerLeNiveauToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveButton.PerformClick();
         }
     }
 }
