@@ -86,7 +86,6 @@ namespace PiouMaker
                             {
                                 string pos = enemyNode.Attributes["pos"].Value;
                                 string[] elements = pos.Split(";");
-                                // Ici, c'est des 50%, a revoir
                                 string X;
                                 string Y;
                                 string[] posXParsed = elements[0].Split("%");
@@ -147,6 +146,24 @@ namespace PiouMaker
                             if (enemyNode.Attributes["xpGived"] != null)
                             {
                                 enemyToAdd.XpGived = int.Parse(enemyNode.Attributes["xpGived"].Value);
+                            }
+                            if (enemyNode.Attributes["mustSetDirection"] != null)
+                            {
+                                switch (enemyNode.Attributes["mustSetDirection"].Value)
+                                {
+                                    case "1":
+                                        enemyToAdd.MustSetDirection = true;
+                                        break;
+                                    default:
+                                        enemyToAdd.MustSetDirection = false;
+                                        break;
+                                }
+                            }
+                            if (enemyNode.Attributes["direction"] != null)
+                            {
+                                string dir = enemyNode.Attributes["direction"].Value;
+                                string[] dirParsed = dir.Split(";");
+                                enemyToAdd.Direction = new Point(int.Parse(dirParsed[0]), int.Parse(dirParsed[1]));
                             }
                             waveToadd.addEnemy(enemyToAdd);
                         }
@@ -227,8 +244,12 @@ namespace PiouMaker
                         xmlWriter.WriteAttributeString("scoreGived", currentEnemy.ScoreGived.ToString());
                         xmlWriter.WriteAttributeString("moveSpeed", currentEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         xmlWriter.WriteAttributeString("apparitionDirection", currentEnemy.ApparitionDirection);
-                        xmlWriter.WriteAttributeString("direction", currentEnemy.Direction.X + ";" + currentEnemy.Direction.Y);
+                        xmlWriter.WriteAttributeString("direction", currentEnemy.Direction.X.ToString() + ";" + currentEnemy.Direction.Y.ToString());
                         xmlWriter.WriteAttributeString("xpGived", currentEnemy.XpGived.ToString());
+                        if (currentEnemy.MustSetDirection)
+                        {
+                            xmlWriter.WriteAttributeString("mustSetDirection", "1");
+                        }
                         xmlWriter.WriteEndElement();
                     }
                     xmlWriter.WriteEndElement();

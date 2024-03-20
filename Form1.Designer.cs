@@ -59,12 +59,14 @@
             créerUnNiveauToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             enregistrerLeNiveauToolStripMenuItem = new ToolStripMenuItem();
+            crossPictureBox = new PictureBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             gamePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gameBackground).BeginInit();
             contextMenuPattern.SuspendLayout();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)crossPictureBox).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -107,9 +109,9 @@
             enemies.ColorDepth = ColorDepth.Depth32Bit;
             enemies.ImageStream = (ImageListStreamer)resources.GetObject("enemies.ImageStream");
             enemies.TransparentColor = Color.Transparent;
-            enemies.Images.SetKeyName(0, "enemy.png");
-            enemies.Images.SetKeyName(1, "lance-bombe.png");
-            enemies.Images.SetKeyName(2, "shootingEnemySolo.png");
+            enemies.Images.SetKeyName(0, "roamingEnemyImage");
+            enemies.Images.SetKeyName(1, "bomberImage");
+            enemies.Images.SetKeyName(2, "shootingEnemyImage");
             // 
             // tabPage2
             // 
@@ -144,11 +146,13 @@
             gameBackground.Location = new Point(0, 0);
             gameBackground.Name = "gameBackground";
             gameBackground.Size = new Size(571, 363);
+            gameBackground.SizeMode = PictureBoxSizeMode.Zoom;
             gameBackground.TabIndex = 0;
             gameBackground.TabStop = false;
             // 
             // patternList
             // 
+            patternList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             patternList.Location = new Point(12, 84);
             patternList.Name = "patternList";
             patternList.Size = new Size(158, 293);
@@ -170,6 +174,7 @@
             // 
             // modifyPropertyButton
             // 
+            modifyPropertyButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             modifyPropertyButton.Location = new Point(837, 358);
             modifyPropertyButton.Name = "modifyPropertyButton";
             modifyPropertyButton.Size = new Size(114, 29);
@@ -181,6 +186,7 @@
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline);
             label1.Location = new Point(850, 28);
@@ -214,6 +220,7 @@
             // 
             // openLevelButton
             // 
+            openLevelButton.Anchor = AnchorStyles.Left;
             openLevelButton.Location = new Point(12, 127);
             openLevelButton.Name = "openLevelButton";
             openLevelButton.Size = new Size(158, 29);
@@ -224,6 +231,7 @@
             // 
             // createLevelButton
             // 
+            createLevelButton.Anchor = AnchorStyles.Left;
             createLevelButton.Location = new Point(12, 189);
             createLevelButton.Name = "createLevelButton";
             createLevelButton.Size = new Size(158, 29);
@@ -328,12 +336,29 @@
             enregistrerLeNiveauToolStripMenuItem.Text = "Enregistrer le niveau";
             enregistrerLeNiveauToolStripMenuItem.Click += enregistrerLeNiveauToolStripMenuItem_Click;
             // 
+            // crossPictureBox
+            // 
+            crossPictureBox.BackColor = Color.Transparent;
+            crossPictureBox.Image = Properties.Resources.Cross;
+            crossPictureBox.Location = new Point(166, 224);
+            crossPictureBox.Name = "crossPictureBox";
+            crossPictureBox.Size = new Size(45, 45);
+            crossPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            crossPictureBox.TabIndex = 13;
+            crossPictureBox.TabStop = false;
+            crossPictureBox.Visible = false;
+            crossPictureBox.MouseDown += PictureBox1_MouseDown;
+            crossPictureBox.MouseMove += PictureBox1_MouseMove;
+            crossPictureBox.MouseUp += cross_MouseUp;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
             ClientSize = new Size(1019, 520);
+            Controls.Add(crossPictureBox);
             Controls.Add(menuStrip1);
             Controls.Add(modifyPropertyButton);
             Controls.Add(createLevelButton);
@@ -357,6 +382,7 @@
             contextMenuPattern.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)crossPictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -393,5 +419,6 @@
         private ToolStripMenuItem créerUnNiveauToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem enregistrerLeNiveauToolStripMenuItem;
+        private PictureBox crossPictureBox;
     }
 }
