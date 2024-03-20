@@ -30,8 +30,8 @@ namespace PiouMaker
         Enemy? selectedEnemy;
 
         //utile pour drag and drop
-        List<PictureBox> enemyPicures = new List<PictureBox>();
-        PictureBox selectedEnemyBox;
+        List<EnemyPictureBox> enemyPicures = new List<EnemyPictureBox>();
+        EnemyPictureBox selectedEnemyBox;
         bool isDragging = false;
         Point originalImageLocation;
 
@@ -242,7 +242,7 @@ namespace PiouMaker
                 for (int i = 0; i < waveSelected.getEnemyList().Count; i++)
                 {
                     //Afficher l'ennemi
-                    PictureBox enemybox = new PictureBox();
+                    EnemyPictureBox enemybox = new EnemyPictureBox();
                     switch (waveSelected.getEnemyList()[i].getEnemyType())
                     {
                         case "bomber":
@@ -259,6 +259,19 @@ namespace PiouMaker
                     enemybox.Location = new Point((int)(gamePanel.Width * (waveSelected.getEnemy(i).getPos().X / 100f) - (float)enemybox.Width / 2f), (int)(gamePanel.Height * (waveSelected.getEnemy(i).getPos().Y / 100f) - (float)enemybox.Height / 2f));
                     enemybox.Cursor = Cursors.Hand;
                     enemybox.BackColor = Color.Transparent;
+
+                    switch (waveSelected.getEnemyList()[i].ApparitionDirection)
+                    {
+                        case "gauche":
+                            enemybox.Angle = 180;
+                            break;
+                        case "haut":
+                            enemybox.Angle = 270f;
+                            break;
+                        case "bas":
+                            enemybox.Angle = 90f;
+                            break;
+                    }
 
                     // On ajoute les controleurs pour les bouger
                     enemybox.MouseDown += PictureBox1_MouseDown;
@@ -574,6 +587,7 @@ namespace PiouMaker
                         comboBox2.SelectedIndex = 3;
                         break;
                 }
+                comboBox2.SelectedIndexChanged += ApparitionSide_SelectedIndexChanged;
                 property2.setControl(comboBox2);
                 property2.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property2);
@@ -742,7 +756,7 @@ namespace PiouMaker
         {
             if (e.Button == MouseButtons.Left)
             {
-                var c = sender as PictureBox;
+                var c = sender as EnemyPictureBox;
                 if (null == c) return;
                 isDragging = false;
                 // on change la position
@@ -785,7 +799,7 @@ namespace PiouMaker
             ListViewItem draggedItem = (ListViewItem)e.Data.GetData(typeof(ListViewItem));
 
             // Créez une PictureBox pour afficher l'image
-            PictureBox pictureBox = new PictureBox
+            EnemyPictureBox pictureBox = new EnemyPictureBox
             {
                 Image = enemies.Images[draggedItem.ImageIndex],
                 Location = panelLocation,
@@ -838,14 +852,14 @@ namespace PiouMaker
         {
             if (e.Button == MouseButtons.Right && currentLevel != null)
             {
-                selectedEnemyBox = sender as PictureBox;
+                selectedEnemyBox = sender as EnemyPictureBox;
                 // On clique droit sur un pattern
                 contextMenuPattern.Items[4].Visible = true;
                 contextMenuPattern.Show(sender as PictureBox, e.Location);
             }
             else if (e.Button == MouseButtons.Left)
             {
-                var c = sender as PictureBox;
+                var c = sender as EnemyPictureBox;
                 if (null == c) return;
                 int index = enemyPicures.IndexOf(c);
                 if (selectedEnemy == null || index != waveSelected.getEnemyList().IndexOf(selectedEnemy))
@@ -968,6 +982,33 @@ namespace PiouMaker
                         crossPictureBox.Visible = false;
                         break;
                 }
+            }
+        }
+
+        private void ApparitionSide_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (selectedEnemy != null)
+            {
+
+                int index = waveSelected.getEnemyList().IndexOf(selectedEnemy);
+                selectedEnemy.ApparitionDirection = properties[10].getControl().Text;
+                switch (properties[10].getControl().Text)
+                {
+                    case "gauche":
+                        enemyPicures[index].Angle = 180f;
+                        break;
+                    case "droite":
+                        enemyPicures[index].Angle = 0;
+                        break;
+                    case "haut":
+                        enemyPicures[index].Angle = 270;
+                        break;
+                    case "bas":
+                        enemyPicures[index].Angle = 90;
+                        break;
+                }
+                enemyPicures[index].Invalidate();
+                enemyPicures[index].Update();
             }
         }
     }
