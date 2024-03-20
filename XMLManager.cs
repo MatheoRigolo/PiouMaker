@@ -96,7 +96,7 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["spawnTime"] != null)
                             {
-                                enemyToAdd.setSpawnTime(int.Parse(enemyNode.Attributes["spawnTime"].Value));
+                                enemyToAdd.setSpawnTime(float.Parse(enemyNode.Attributes["spawnTime"].Value, System.Globalization.CultureInfo.InvariantCulture));
                             }
                             // Lire le reste des attributs
                             if (enemyNode.Attributes["autoAim"] != null)
@@ -227,7 +227,7 @@ namespace PiouMaker
                         xmlWriter.WriteStartElement("enemy");
                         if (currentEnemy.getSpawnTime() != -1)
                         {
-                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.getSpawnTime().ToString());
+                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.getSpawnTime().ToString(System.Globalization.CultureInfo.InvariantCulture));
                         }
                         xmlWriter.WriteAttributeString("type", currentEnemy.getEnemyType());
                         string posString = currentEnemy.getPos().X + "%;" + currentEnemy.getPos().Y+"%";

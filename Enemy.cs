@@ -14,7 +14,7 @@ namespace PiouMaker
         /// </summary>
         private string enemyType = "roamingEnemy";
         private Vector2 pos = new Vector2(0,0);
-        private int spawnTime = 0;
+        private float spawnTime = 0;
 
         private bool autoAim = false;
         private int damage = 3;
@@ -56,8 +56,8 @@ namespace PiouMaker
 
         public string getEnemyType() { return enemyType; }
         public void setEnemyType(string enemyType) {  this.enemyType = enemyType; }
-        public int getSpawnTime() {  return spawnTime; }
-        public void setSpawnTime(int spawnTime)
+        public float getSpawnTime() {  return spawnTime; }
+        public void setSpawnTime(float spawnTime)
         {
             this.spawnTime = spawnTime;
         }

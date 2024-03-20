@@ -523,7 +523,7 @@ namespace PiouMaker
                 property1.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property1);
 
-                addProperty("Délai d'apparition :", selectedEnemy.getSpawnTime().ToString());
+                addProperty("Délai d'apparition :", selectedEnemy.getSpawnTime().ToString(System.Globalization.CultureInfo.InvariantCulture));
 
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Auto Aim :");
@@ -678,7 +678,7 @@ namespace PiouMaker
                     }
                     selectedEnemy.setEnemyType(enemyType);
 
-                    selectedEnemy.setSpawnTime(int.Parse(properties[1].getControl().Text));
+                    selectedEnemy.setSpawnTime(float.Parse(properties[1].getControl().Text, System.Globalization.CultureInfo.InvariantCulture));
 
                     switch (properties[2].getControl().Text)
                     {

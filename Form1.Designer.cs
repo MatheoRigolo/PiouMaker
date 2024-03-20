@@ -128,7 +128,8 @@
             gamePanel.AllowDrop = true;
             gamePanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gamePanel.BackColor = Color.Transparent;
-            gamePanel.BackgroundImageLayout = ImageLayout.Stretch;
+            gamePanel.BackgroundImage = Properties.Resources.parallax_mountain_bg;
+            gamePanel.BackgroundImageLayout = ImageLayout.Zoom;
             gamePanel.Controls.Add(gameBackground);
             gamePanel.Location = new Point(189, 14);
             gamePanel.Name = "gamePanel";
@@ -140,7 +141,6 @@
             // 
             // gameBackground
             // 
-            gameBackground.BackgroundImage = Properties.Resources.parallax_mountain_bg;
             gameBackground.BackgroundImageLayout = ImageLayout.Stretch;
             gameBackground.Dock = DockStyle.Fill;
             gameBackground.Location = new Point(0, 0);
