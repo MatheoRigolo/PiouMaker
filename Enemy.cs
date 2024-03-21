@@ -13,7 +13,7 @@ namespace PiouMaker
         /// possibilities : roamingEnemy, shootingEnemy, bomber, rusher
         /// </summary>
         private string enemyType = "roamingEnemy";
-        private Vector2 pos = new Vector2(0,0);
+        private Point pos = new Point(0,0);
         private float spawnTime = 0;
 
         private bool autoAim = false;
@@ -46,6 +46,9 @@ namespace PiouMaker
         public Point Direction { get => direction; set => direction = value; }
         public int XpGived { get => xpGived; set => xpGived = value; }
         public bool MustSetDirection { get => mustSetDirection; set => mustSetDirection = value; }
+        public string EnemyType { get => enemyType; set => enemyType = value; }
+        public float SpawnTime { get => spawnTime; set => spawnTime = value; }
+        public Point Pos { get => pos; set => pos = value; }
 
         public Enemy(string enemyType)
         {
@@ -54,22 +57,14 @@ namespace PiouMaker
 
         public Enemy() { }
 
-        public string getEnemyType() { return enemyType; }
-        public void setEnemyType(string enemyType) {  this.enemyType = enemyType; }
-        public float getSpawnTime() {  return spawnTime; }
-        public void setSpawnTime(float spawnTime)
-        {
-            this.spawnTime = spawnTime;
-        }
+        public Point getPos() { return pos; }
 
-        public Vector2 getPos() { return pos; }
-
-        public void setPos(Vector2 posParam) { 
+        public void setPos(Point posParam) { 
             this.pos = posParam;
         }
         public void setPos(int x, int y)
         {
-            pos = new Vector2(x, y);
+            pos = new Point(x, y);
         }
     }
 }

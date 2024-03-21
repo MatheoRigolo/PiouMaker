@@ -371,10 +371,12 @@
             Controls.Add(tabControl1);
             Controls.Add(label1);
             DoubleBuffered = true;
+            KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "PiouMaker";
             Load += Form1_Load;
+            KeyDown += Form1_KeyDown;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             gamePanel.ResumeLayout(false);

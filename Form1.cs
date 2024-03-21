@@ -9,7 +9,9 @@ using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,7 +28,9 @@ namespace PiouMaker
         Level? currentLevel;
         XMLManager xmlManager;
         List<PropertyView> properties;
-        Wave waveSelected;
+
+        Pattern? selectedPattern;
+        Wave? selectedWave;
         Enemy? selectedEnemy;
 
         //utile pour drag and drop
@@ -224,26 +228,29 @@ namespace PiouMaker
             //Listener de la patternList
             if (patternList.SelectedNode.Parent == null)
             {
+                selectedWave = null;
+                selectedEnemy = null;
                 //On a sélectionné un pattern
-
+                selectedPattern = currentLevel.getPattern(patternList.SelectedNode.Index);
                 //On enlève le panel du milieu : plus aucune vague n'est sélectionnée
                 gamePanel.Visible = false;
             }
             else
             {
                 // On a sélectionné une wave
-                waveSelected = currentLevel.getPattern(patternList.SelectedNode.Parent.Index).getWave(patternList.SelectedNode.Index);
+                selectedPattern = currentLevel.getPattern(patternList.SelectedNode.Parent.Index);
+                selectedWave = selectedPattern.getWave(patternList.SelectedNode.Index);
                 enemyPicures.Clear();
 
                 //On affiche le preview du jeu au milieu
                 gamePanel.Visible = true;
 
                 //Il faut afficher les ennemis
-                for (int i = 0; i < waveSelected.getEnemyList().Count; i++)
+                for (int i = 0; i < selectedWave.EnemyList.Count; i++)
                 {
                     //Afficher l'ennemi
                     EnemyPictureBox enemybox = new EnemyPictureBox();
-                    switch (waveSelected.getEnemyList()[i].getEnemyType())
+                    switch (selectedWave.EnemyList[i].EnemyType)
                     {
                         case "bomber":
                             enemybox.Image = enemies.Images["bomberImage"];
@@ -256,11 +263,11 @@ namespace PiouMaker
                             break;
                     }
                     enemybox.SizeMode = PictureBoxSizeMode.AutoSize;
-                    enemybox.Location = new Point((int)(gamePanel.Width * (waveSelected.getEnemy(i).getPos().X / 100f) - (float)enemybox.Width / 2f), (int)(gamePanel.Height * (waveSelected.getEnemy(i).getPos().Y / 100f) - (float)enemybox.Height / 2f));
+                    enemybox.Location = new Point((int)(gamePanel.Width * (selectedWave.getEnemy(i).getPos().X / 100f) - (float)enemybox.Width / 2f), (int)(gamePanel.Height * (selectedWave.getEnemy(i).getPos().Y / 100f) - (float)enemybox.Height / 2f));
                     enemybox.Cursor = Cursors.Hand;
                     enemybox.BackColor = Color.Transparent;
 
-                    switch (waveSelected.getEnemyList()[i].ApparitionDirection)
+                    switch (selectedWave.EnemyList[i].ApparitionDirection)
                     {
                         case "gauche":
                             enemybox.Angle = 180;
@@ -360,7 +367,7 @@ namespace PiouMaker
                 if (selectedEnemyBox != null)
                 {
                     int index = enemyPicures.IndexOf(selectedEnemyBox);
-                    waveSelected.removeEnemy(index);
+                    selectedWave.removeEnemy(index);
                     enemyPicures.Remove(selectedEnemyBox);
                     selectedEnemyBox.Dispose();
                     selectedEnemy = null;
@@ -435,13 +442,13 @@ namespace PiouMaker
             else if (!isLevelProperties && patternList.SelectedNode != null && patternList.SelectedNode.Parent != null && selectedEnemy == null)
             {
                 // Proprétés d'une wave
-                addProperty("Durée :", waveSelected.getDuration().ToString());
+                addProperty("Durée :", selectedWave.getDuration().ToString());
 
                 PropertyView property2 = new PropertyView();
                 property2.setPanelString("Nombre d'ennemis :");
                 TextBox textBox2 = new TextBox();
                 textBox2.Enabled = false;
-                textBox2.Text = waveSelected.getEnemyList().Count.ToString();
+                textBox2.Text = selectedWave.EnemyList.Count.ToString();
                 property2.setControl(textBox2);
                 property2.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property2);
@@ -516,7 +523,7 @@ namespace PiouMaker
                 comboBox1.Items.Add("shooting enemy");
                 comboBox1.Items.Add("rusher");
                 comboBox1.Items.Add("bomber");
-                switch (selectedEnemy.getEnemyType())
+                switch (selectedEnemy.EnemyType)
                 {
                     case "roamingEnemy":
                         comboBox1.SelectedIndex = 0;
@@ -536,7 +543,7 @@ namespace PiouMaker
                 property1.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add(property1);
 
-                addProperty("Délai d'apparition :", selectedEnemy.getSpawnTime().ToString(System.Globalization.CultureInfo.InvariantCulture));
+                addProperty("Délai d'apparition :", selectedEnemy.SpawnTime.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Auto Aim :");
@@ -690,9 +697,9 @@ namespace PiouMaker
                             enemyType = typeText; ;
                             break;
                     }
-                    selectedEnemy.setEnemyType(enemyType);
+                    selectedEnemy.EnemyType = enemyType;
 
-                    selectedEnemy.setSpawnTime(float.Parse(properties[1].getControl().Text, System.Globalization.CultureInfo.InvariantCulture));
+                    selectedEnemy.SpawnTime = float.Parse(properties[1].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
 
                     switch (properties[2].getControl().Text)
                     {
@@ -715,7 +722,7 @@ namespace PiouMaker
                     selectedEnemy.ApparitionDirection = properties[10].getControl().Text;
                     selectedEnemy.XpGived = int.Parse(properties[11].getControl().Text);
 
-                    selectedEnemy.MustSetDirection = properties[12].getControl().Text=="oui";
+                    selectedEnemy.MustSetDirection = properties[12].getControl().Text == "oui";
                 }
                 refreshProperties();
             }
@@ -763,7 +770,7 @@ namespace PiouMaker
                 int index = enemyPicures.IndexOf(c);
                 int X = (int)((float)(c.Location.X + c.Size.Width / 2) / (float)gamePanel.Size.Width * 100);
                 int Y = (int)((float)(c.Location.Y + c.Size.Height / 2) / (float)gamePanel.Size.Height * 100);
-                waveSelected.getEnemyList()[index].setPos(X, Y);
+                selectedWave.EnemyList[index].setPos(X, Y);
             }
         }
 
@@ -824,16 +831,16 @@ namespace PiouMaker
             switch (draggedItem.ImageIndex)
             {
                 case 1:
-                    newEnemy.setEnemyType("bomber");
+                    newEnemy.EnemyType = "bomber";
                     break;
                 case 2:
-                    newEnemy.setEnemyType("shootingEnemy");
+                    newEnemy.EnemyType = "shootingEnemy";
                     break;
                 default:
-                    newEnemy.setEnemyType("roamingEnemy");
+                    newEnemy.EnemyType = "roamingEnemy";
                     break;
             }
-            waveSelected.addEnemy(newEnemy);
+            selectedWave.addEnemy(newEnemy);
             gamePanel.Controls.Add(pictureBox);
             gamePanel.Controls[gamePanel.Controls.Count - 1].BringToFront();
 
@@ -862,17 +869,17 @@ namespace PiouMaker
                 var c = sender as EnemyPictureBox;
                 if (null == c) return;
                 int index = enemyPicures.IndexOf(c);
-                if (selectedEnemy == null || index != waveSelected.getEnemyList().IndexOf(selectedEnemy))
+                if (selectedEnemy == null || index != selectedWave.EnemyList.IndexOf(selectedEnemy))
                 {
-                    selectedEnemy = waveSelected.getEnemy(index);
+                    selectedEnemy = selectedWave.getEnemy(index);
                     // On affiche les propriétés de l'ennemi
                     refreshProperties();
-                    
+
                     if (selectedEnemy.MustSetDirection)
                     {
                         // On affiche la cross
                         crossPictureBox.Visible = true;
-                        crossPictureBox.Location = new Point((int)((float)(selectedEnemy.Direction.X)/100f * (float)gamePanel.Width), (int)((float)(selectedEnemy.Direction.Y)/100f * (float)gamePanel.Height));
+                        crossPictureBox.Location = new Point((int)((float)(selectedEnemy.Direction.X) / 100f * (float)gamePanel.Width), (int)((float)(selectedEnemy.Direction.Y) / 100f * (float)gamePanel.Height));
                         gamePanel.Controls.Add(crossPictureBox);
                         gamePanel.Controls[gamePanel.Controls.Count - 1].BringToFront();
 
@@ -899,25 +906,25 @@ namespace PiouMaker
         {
             if (selectedEnemy != null)
             {
-                int index = waveSelected.getEnemyList().IndexOf(selectedEnemy);
+                int index = selectedWave.EnemyList.IndexOf(selectedEnemy);
                 string newType = properties[0].getControl().Text;
                 switch (newType)
                 {
                     case "bomber":
                         enemyPicures[index].Image = enemies.Images["bomberEnemy"];
-                        selectedEnemy.setEnemyType("bomber");
+                        selectedEnemy.EnemyType = "bomber";
                         break;
                     case "shooting enemy":
                         enemyPicures[index].Image = enemies.Images["shootingEnemyImage"];
-                        selectedEnemy.setEnemyType("shootingEnemy");
+                        selectedEnemy.EnemyType = "shootingEnemy";
                         break;
                     case "roaming enemy":
                         enemyPicures[index].Image = enemies.Images["roamingEnemyImage"];
-                        selectedEnemy.setEnemyType("roamingEnemy");
+                        selectedEnemy.EnemyType = "roamingEnemy";
                         break;
                     case "rusher":
                         enemyPicures[index].Image = enemies.Images["roamingEnemyImage"];
-                        selectedEnemy.setEnemyType("rusher");
+                        selectedEnemy.EnemyType = "rusher";
                         break;
                     default:
                         enemyPicures[index].Image = enemies.Images["roamingEnemyImage"];
@@ -973,7 +980,7 @@ namespace PiouMaker
         {
             if (selectedEnemy != null)
             {
-                switch(properties[12].getControl().Text)
+                switch (properties[12].getControl().Text)
                 {
                     case "oui":
                         crossPictureBox.Visible = true;
@@ -990,7 +997,7 @@ namespace PiouMaker
             if (selectedEnemy != null)
             {
 
-                int index = waveSelected.getEnemyList().IndexOf(selectedEnemy);
+                int index = selectedWave.EnemyList.IndexOf(selectedEnemy);
                 selectedEnemy.ApparitionDirection = properties[10].getControl().Text;
                 switch (properties[10].getControl().Text)
                 {
@@ -1010,6 +1017,104 @@ namespace PiouMaker
                 enemyPicures[index].Invalidate();
                 enemyPicures[index].Update();
             }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (selectedEnemy != null)
+            {
+                if (e.Control && e.KeyCode == Keys.C)
+                {
+                    CopyToClipboard<Enemy>(selectedEnemy);
+                }
+                else if (e.Control && e.KeyCode == Keys.V)
+                {
+                    Enemy? enemyToCopy = PasteFromClipboard<Enemy>();
+                    if (enemyToCopy != null)
+                    {
+                        // ON ajoute l'ennemi et la pictureBox
+                        enemyToCopy.setPos(0, 0);
+                        selectedWave.addEnemy(enemyToCopy);
+                        EnemyPictureBox enemybox = new EnemyPictureBox();
+                        switch (enemyToCopy.EnemyType)
+                        {
+                            case "bomber":
+                                enemybox.Image = enemies.Images["bomberImage"];
+                                break;
+                            case "shootingEnemy":
+                                enemybox.Image = enemies.Images["shootingEnemyImage"];
+                                break;
+                            default:
+                                enemybox.Image = enemies.Images["roamingEnemyImage"];
+                                break;
+                        }
+                        enemybox.SizeMode = PictureBoxSizeMode.AutoSize;
+                        enemybox.Location = new Point();
+                        enemybox.Cursor = Cursors.Hand;
+                        enemybox.BackColor = Color.Transparent;
+
+                        switch (enemyToCopy.ApparitionDirection)
+                        {
+                            case "gauche":
+                                enemybox.Angle = 180;
+                                break;
+                            case "haut":
+                                enemybox.Angle = 270f;
+                                break;
+                            case "bas":
+                                enemybox.Angle = 90f;
+                                break;
+                        }
+
+                        // On ajoute les controleurs pour les bouger
+                        enemybox.MouseDown += PictureBox1_MouseDown;
+                        enemybox.MouseMove += PictureBox1_MouseMove;
+                        enemybox.MouseUp += PictureBox1_MouseUp;
+                        enemybox.MouseClick += enemy_MouseClick;
+
+                        enemyPicures.Add(enemybox);
+                        gamePanel.Controls.Add(enemybox);
+                        gamePanel.Controls[gamePanel.Controls.Count - 1].BringToFront();
+                    }
+                }
+            }
+            else if (selectedWave != null)
+            {
+                if (e.Control && e.KeyCode == Keys.C)
+                {
+                    CopyToClipboard<Wave>(selectedWave);
+                }
+                else if (e.Control && e.KeyCode == Keys.V)
+                {
+                    Wave? waveToCopy = PasteFromClipboard<Wave>();
+                    if (waveToCopy != null) selectedPattern.addWave(waveToCopy);
+                    refreshPatternList();
+                }
+            }
+        }
+        private void CopyToClipboard<T>(T obj)
+        {
+            if (obj != null)
+            {
+                string jsonString = JsonSerializer.Serialize(obj);
+
+                // Copie de l'objet sérialisé dans le Presse-papiers
+                Clipboard.SetText(jsonString);
+            }
+        }
+        private T? PasteFromClipboard<T>()
+        {
+            // Récupération des données du Presse-papiers
+            IDataObject clipboardData = Clipboard.GetDataObject();
+
+            if (clipboardData != null && clipboardData.GetDataPresent(DataFormats.Text))
+            {
+                // Désérialisation de l'objet JSON
+                string jsonString = (string)clipboardData.GetData(DataFormats.Text);
+                return JsonSerializer.Deserialize<T>(jsonString);
+            }
+
+            return default(T);
         }
     }
 }

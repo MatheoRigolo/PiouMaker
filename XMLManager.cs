@@ -80,7 +80,7 @@ namespace PiouMaker
                             // Récupérer les attributs de l'ennemi
                             if (enemyNode.Attributes["type"] != null)
                             {
-                                enemyToAdd.setEnemyType(enemyNode.Attributes["type"].Value);
+                                enemyToAdd.EnemyType = enemyNode.Attributes["type"].Value;
                             }
                             if (enemyNode.Attributes["pos"] != null)
                             {
@@ -96,7 +96,7 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["spawnTime"] != null)
                             {
-                                enemyToAdd.setSpawnTime(float.Parse(enemyNode.Attributes["spawnTime"].Value, System.Globalization.CultureInfo.InvariantCulture));
+                                enemyToAdd.SpawnTime = float.Parse(enemyNode.Attributes["spawnTime"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             // Lire le reste des attributs
                             if (enemyNode.Attributes["autoAim"] != null)
@@ -221,15 +221,15 @@ namespace PiouMaker
                     {
                         xmlWriter.WriteAttributeString("duration", currentWave.getDuration().ToString());
                     }
-                    for (int u = 0; u < currentWave.getEnemyList().Count; u++)
+                    for (int u = 0; u < currentWave.EnemyList.Count; u++)
                     {
-                        Enemy currentEnemy = currentWave.getEnemyList()[u];
+                        Enemy currentEnemy = currentWave.EnemyList[u];
                         xmlWriter.WriteStartElement("enemy");
-                        if (currentEnemy.getSpawnTime() != -1)
+                        if (currentEnemy.SpawnTime != -1)
                         {
-                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.getSpawnTime().ToString(System.Globalization.CultureInfo.InvariantCulture));
+                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.SpawnTime.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         }
-                        xmlWriter.WriteAttributeString("type", currentEnemy.getEnemyType());
+                        xmlWriter.WriteAttributeString("type", currentEnemy.EnemyType);
                         string posString = currentEnemy.getPos().X + "%;" + currentEnemy.getPos().Y+"%";
                         xmlWriter.WriteAttributeString("pos", posString);
                         if (currentEnemy.AutoAim)
