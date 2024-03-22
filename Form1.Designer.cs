@@ -39,7 +39,6 @@
             gameBackground = new PictureBox();
             patternList = new TreeView();
             propertiesPanel = new Panel();
-            modifyPropertyButton = new Button();
             label1 = new Label();
             levelName = new Label();
             saveButton = new Button();
@@ -169,20 +168,8 @@
             propertiesPanel.BackColor = Color.White;
             propertiesPanel.Location = new Point(791, 54);
             propertiesPanel.Name = "propertiesPanel";
-            propertiesPanel.Size = new Size(206, 298);
+            propertiesPanel.Size = new Size(206, 323);
             propertiesPanel.TabIndex = 3;
-            // 
-            // modifyPropertyButton
-            // 
-            modifyPropertyButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            modifyPropertyButton.Location = new Point(837, 358);
-            modifyPropertyButton.Name = "modifyPropertyButton";
-            modifyPropertyButton.Size = new Size(114, 29);
-            modifyPropertyButton.TabIndex = 11;
-            modifyPropertyButton.Text = "Modifier";
-            modifyPropertyButton.UseVisualStyleBackColor = true;
-            modifyPropertyButton.Visible = false;
-            modifyPropertyButton.Click += modifyPropertyButton_Click;
             // 
             // label1
             // 
@@ -360,7 +347,6 @@
             ClientSize = new Size(1019, 520);
             Controls.Add(crossPictureBox);
             Controls.Add(menuStrip1);
-            Controls.Add(modifyPropertyButton);
             Controls.Add(createLevelButton);
             Controls.Add(openLevelButton);
             Controls.Add(saveButton);
@@ -405,7 +391,6 @@
         private Button openLevelButton;
         private Button createLevelButton;
         private OpenFileDialog openFileDialog1;
-        private Button modifyPropertyButton;
         private TreeView patternList;
         private ContextMenuStrip contextMenuPattern;
         private ToolStripMenuItem ajouterUnPatternToolStripMenuItem;

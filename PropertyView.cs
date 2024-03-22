@@ -10,6 +10,9 @@ namespace PiouMaker
     {
         private Label propertyLabel;
         private Control propertyControl;
+        private string propertyName;
+
+        public string PropertyName { get => propertyName; set => propertyName = value; }
 
         public PropertyView()
         {
