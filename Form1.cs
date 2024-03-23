@@ -930,7 +930,7 @@ namespace PiouMaker
         {
             if (selectedEnemy != null)
             {
-                selectedEnemy.MustSetDirection = properties["mustSetDirection"].getControl().Text == "vrai";
+                selectedEnemy.MustSetDirection = properties["mustSetDirection"].getControl().Text == "oui";
                 if (selectedEnemy.MustSetDirection)
                 {
                     crossPictureBox.Visible = true;
