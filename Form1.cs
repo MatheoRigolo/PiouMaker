@@ -271,18 +271,26 @@ namespace PiouMaker
                     enemybox.Cursor = Cursors.Hand;
                     enemybox.BackColor = Color.Transparent;
 
-                    switch (selectedWave.EnemyList[i].ApparitionDirection)
+                    if (selectedWave.EnemyList[i].EnemyType != "bomber")
                     {
-                        case "gauche":
-                            enemybox.Angle = 180;
-                            break;
-                        case "haut":
-                            enemybox.Angle = 270f;
-                            break;
-                        case "bas":
-                            enemybox.Angle = 90f;
-                            break;
+                        switch (selectedWave.EnemyList[i].ApparitionDirection)
+                        {
+                            case "gauche":
+                                enemybox.Angle = 180;
+                                break;
+                            case "haut":
+                                enemybox.Angle = 270f;
+                                break;
+                            case "bas":
+                                enemybox.Angle = 90f;
+                                break;
+                        }
                     }
+                    else
+                    {
+                        enemybox.Angle = 0f;
+                    }
+                    
 
                     // On ajoute les controleurs pour les bouger
                     enemybox.MouseDown += PictureBox1_MouseDown;
@@ -527,6 +535,8 @@ namespace PiouMaker
             {
                 // proprétés d'un ennemi
 
+                // Propriétés communes à tous les ennemis
+
                 PropertyView property1 = new PropertyView();
                 property1.setPanelString("Type d'ennemi :");
                 ComboBox comboBox1 = new ComboBox();
@@ -556,54 +566,93 @@ namespace PiouMaker
                 properties.Add("enemyType", property1);
 
                 addProperty("Délai d'apparition :", selectedEnemy.SpawnTime.ToString(System.Globalization.CultureInfo.InvariantCulture), "spawnTime");
-
-                PropertyView property3 = new PropertyView();
-                property3.setPanelString("Auto Aim :");
-                ComboBox comboBox3 = new ComboBox();
-                comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
-                comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
-                comboBox3.Items.Add("Faux");
-                comboBox3.Items.Add("Vrai");
-                if (selectedEnemy.AutoAim)
-                {
-                    comboBox3.SelectedIndex = 1;
-                }
-                else
-                {
-                    comboBox3.SelectedIndex = 0;
-                }
-                property3.setControl(comboBox3);
-                property3.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add("isAutoAim", property3);
-
                 addProperty("Dégats :", selectedEnemy.Damage.ToString(), "damage");
-                addProperty("Dégats par balle :", selectedEnemy.DamagePerBullet.ToString(), "damagePerBullet");
-                addProperty("Vitesse d'attaque :", selectedEnemy.AttackSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "attackSpeed");
-                addProperty("Vitesse des balles :", selectedEnemy.BulletSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "bulletSpeed");
                 addProperty("Points de vie :", selectedEnemy.Health.ToString(), "health");
                 addProperty("Score gagné :", selectedEnemy.ScoreGived.ToString(), "scoreGived");
                 addProperty("Vitesse de déplacement :", selectedEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "moveSpeed");
+                addProperty("xp donnée :", selectedEnemy.XpGived.ToString(), "xpGived");
+
+
+                // Propriétés des shootings et des bomber
+
+                if (selectedEnemy.EnemyType == "shootingEnemy" || selectedEnemy.EnemyType == "bomber")
+                {
+                    addProperty("Dégats par balle :", selectedEnemy.DamagePerBullet.ToString(), "damagePerBullet");
+                    addProperty("Vitesse d'attaque :", selectedEnemy.AttackSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "attackSpeed");
+                    addProperty("Vitesse des balles :", selectedEnemy.BulletSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "bulletSpeed");
+                }
+
+                // Proprétés des roaming/rusher/shooting
+
+                if (selectedEnemy.EnemyType == "roamingEnemy" || selectedEnemy.EnemyType == "rusher" || selectedEnemy.EnemyType == "shootingEnemy")
+                {
+                    PropertyView property3 = new PropertyView();
+                    property3.setPanelString("Auto Aim :");
+                    ComboBox comboBox3 = new ComboBox();
+                    comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
+                    comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
+                    comboBox3.Items.Add("Faux");
+                    comboBox3.Items.Add("Vrai");
+                    if (selectedEnemy.AutoAim)
+                    {
+                        comboBox3.SelectedIndex = 1;
+                    }
+                    else
+                    {
+                        comboBox3.SelectedIndex = 0;
+                    }
+                    property3.setControl(comboBox3);
+                    property3.setPos(propertiesPanel.DisplayRectangle, properties.Count);
+                    properties.Add("autoAim", property3);
+
+                    // Must set direction ? Apparit que si autoAim = false
+
+                    if (!selectedEnemy.AutoAim)
+                    {
+                        PropertyView propertyDirection = new PropertyView();
+                        propertyDirection.setPanelString("Saisir la direction ?");
+                        ComboBox comboBoxDirection = new ComboBox();
+                        comboBoxDirection.DropDownStyle = ComboBoxStyle.DropDownList;
+                        comboBoxDirection.Items.Add("non");
+                        comboBoxDirection.Items.Add("oui");
+                        if (selectedEnemy.MustSetDirection)
+                        {
+                            comboBoxDirection.SelectedIndex = 1;
+                        }
+                        else
+                        {
+                            comboBoxDirection.SelectedIndex = 0;
+                        }
+                        comboBoxDirection.SelectedIndexChanged += mustSetDirection_SelectedIndexChanged;
+                        propertyDirection.setControl(comboBoxDirection);
+                        propertyDirection.setPos(propertiesPanel.DisplayRectangle, properties.Count);
+                        properties.Add("mustSetDirection", propertyDirection);
+                    }
+                }
 
                 PropertyView property2 = new PropertyView();
                 property2.setPanelString("Côté d'apparition :");
                 ComboBox comboBox2 = new ComboBox();
                 comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-                comboBox2.Items.Add("haut");
-                comboBox2.Items.Add("bas");
                 comboBox2.Items.Add("droite");
                 comboBox2.Items.Add("gauche");
+                if (selectedEnemy.EnemyType != "bomber")
+                {
+                    comboBox2.Items.Add("haut");
+                    comboBox2.Items.Add("bas");
+                }
                 switch (selectedEnemy.ApparitionDirection)
                 {
-                    case "haut":
+                    case "droite":
                         comboBox2.SelectedIndex = 0;
                         break;
-                    case "bas":
+                    case "gauche":
                         comboBox2.SelectedIndex = 1;
                         break;
-                    case "droite":
+                    case "haut":
                         comboBox2.SelectedIndex = 2;
                         break;
-                    case "gauche":
+                    case "bas":
                         comboBox2.SelectedIndex = 3;
                         break;
                 }
@@ -611,27 +660,6 @@ namespace PiouMaker
                 property2.setControl(comboBox2);
                 property2.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add("apparitionSide", property2);
-
-                addProperty("xp donnée :", selectedEnemy.XpGived.ToString(), "xpGived");
-
-                PropertyView propertyDirection = new PropertyView();
-                propertyDirection.setPanelString("Saisir la direction ?");
-                ComboBox comboBoxDirection = new ComboBox();
-                comboBoxDirection.DropDownStyle = ComboBoxStyle.DropDownList;
-                comboBoxDirection.Items.Add("non");
-                comboBoxDirection.Items.Add("oui");
-                if (selectedEnemy.MustSetDirection)
-                {
-                    comboBoxDirection.SelectedIndex = 1;
-                }
-                else
-                {
-                    comboBoxDirection.SelectedIndex = 0;
-                }
-                comboBoxDirection.SelectedIndexChanged += mustSetDirection_SelectedIndexChanged;
-                propertyDirection.setControl(comboBoxDirection);
-                propertyDirection.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add("mustSetDirection", propertyDirection);
             }
 
             propertiesPanel.Controls.Clear();
@@ -827,8 +855,13 @@ namespace PiouMaker
                 switch (newType)
                 {
                     case "bomber":
-                        enemyPicures[index].Image = enemies.Images["bomberEnemy"];
                         selectedEnemy.EnemyType = "bomber";
+                        if (selectedEnemy.ApparitionDirection == "haut" || selectedEnemy.ApparitionDirection == "bas")
+                        {
+                            selectedEnemy.ApparitionDirection = "droite";
+                        }
+                        enemyPicures[index].Angle = 0f;
+                        enemyPicures[index].Image = enemies.Images["bomberImage"];
                         break;
                     case "shooting enemy":
                         enemyPicures[index].Image = enemies.Images["shootingEnemyImage"];
@@ -846,6 +879,7 @@ namespace PiouMaker
                         enemyPicures[index].Image = enemies.Images["roamingEnemyImage"];
                         break;
                 }
+                refreshProperties();
             }
         }
 
@@ -896,14 +930,14 @@ namespace PiouMaker
         {
             if (selectedEnemy != null)
             {
-                switch (properties["mustSetDirection"].getControl().Text)
+                selectedEnemy.MustSetDirection = properties["mustSetDirection"].getControl().Text == "vrai";
+                if (selectedEnemy.MustSetDirection)
                 {
-                    case "oui":
-                        crossPictureBox.Visible = true;
-                        break;
-                    case "non":
-                        crossPictureBox.Visible = false;
-                        break;
+                    crossPictureBox.Visible = true;
+                }
+                else
+                {
+                    crossPictureBox.Visible = false;
                 }
             }
         }
@@ -915,20 +949,27 @@ namespace PiouMaker
 
                 int index = selectedWave.EnemyList.IndexOf(selectedEnemy);
                 selectedEnemy.ApparitionDirection = properties["apparitionSide"].getControl().Text;
-                switch (properties["apparitionSide"].getControl().Text)
+                if (selectedEnemy.EnemyType != "bomber")
                 {
-                    case "gauche":
-                        enemyPicures[index].Angle = 180f;
-                        break;
-                    case "droite":
-                        enemyPicures[index].Angle = 0;
-                        break;
-                    case "haut":
-                        enemyPicures[index].Angle = 270;
-                        break;
-                    case "bas":
-                        enemyPicures[index].Angle = 90;
-                        break;
+                    switch (properties["apparitionSide"].getControl().Text)
+                    {
+                        case "gauche":
+                            enemyPicures[index].Angle = 180f;
+                            break;
+                        case "droite":
+                            enemyPicures[index].Angle = 0;
+                            break;
+                        case "haut":
+                            enemyPicures[index].Angle = 270;
+                            break;
+                        case "bas":
+                            enemyPicures[index].Angle = 90;
+                            break;
+                    }
+                }
+                else
+                {
+                    enemyPicures[index].Angle = 0;
                 }
                 enemyPicures[index].Invalidate();
                 enemyPicures[index].Update();
@@ -1052,17 +1093,42 @@ namespace PiouMaker
                 }
                 else if (properties.Count > 0 && selectedEnemy != null)
                 {
-                    selectedEnemy.SpawnTime = float.Parse(properties["spawnTime"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
-
-                    selectedEnemy.Damage = int.Parse(properties["damage"].getControl().Text);
-                    selectedEnemy.DamagePerBullet = int.Parse(properties["damagePerBullet"].getControl().Text);
-                    selectedEnemy.AttackSpeed = float.Parse(properties["attackSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
-                    selectedEnemy.BulletSpeed = float.Parse(properties["bulletSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
-                    selectedEnemy.Health = int.Parse(properties["health"].getControl().Text);
-                    selectedEnemy.ScoreGived = int.Parse(properties["scoreGived"].getControl().Text);
-                    selectedEnemy.MoveSpeed = float.Parse(properties["moveSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
-
-                    selectedEnemy.XpGived = int.Parse(properties["xpGived"].getControl().Text);
+                    if (properties.ContainsKey("spawnTime"))
+                    {
+                        selectedEnemy.SpawnTime = float.Parse(properties["spawnTime"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    if (properties.ContainsKey("damage"))
+                    {
+                        selectedEnemy.Damage = int.Parse(properties["damage"].getControl().Text);
+                    }
+                    if (properties.ContainsKey("damagePerBullet"))
+                    {
+                        selectedEnemy.DamagePerBullet = int.Parse(properties["damagePerBullet"].getControl().Text);
+                    }
+                    if (properties.ContainsKey("attackSpeed"))
+                    {
+                        selectedEnemy.AttackSpeed = float.Parse(properties["attackSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    if (properties.ContainsKey("bulletSpeed"))
+                    {
+                        selectedEnemy.BulletSpeed = float.Parse(properties["bulletSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    if (properties.ContainsKey("health"))
+                    {
+                        selectedEnemy.Health = int.Parse(properties["health"].getControl().Text);
+                    }
+                    if (properties.ContainsKey("scoreGived"))
+                    {
+                        selectedEnemy.ScoreGived = int.Parse(properties["scoreGived"].getControl().Text);
+                    }
+                    if (properties.ContainsKey("moveSpeed"))
+                    {
+                        selectedEnemy.MoveSpeed = float.Parse(properties["moveSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    if (properties.ContainsKey("xpGived"))
+                    {
+                        selectedEnemy.XpGived = int.Parse(properties["xpGived"].getControl().Text);
+                    }
                 }
                 //refreshProperties();
             }
@@ -1141,6 +1207,12 @@ namespace PiouMaker
                     if (indexKey == "autoAim")
                     {
                         selectedEnemy.AutoAim = properties[indexKey].getControl().Text == "Vrai";
+                        if (selectedEnemy.AutoAim)
+                        {
+                            selectedEnemy.MustSetDirection = false;
+                            crossPictureBox.Visible = false;
+                        }
+                        refreshProperties();
                     }
                 }
             }
