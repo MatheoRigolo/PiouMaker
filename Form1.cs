@@ -417,8 +417,8 @@ namespace PiouMaker
 
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Est aléatoire :");
-                property3.PropertyName = "isRandomPattern";
-                ComboBox comboBox3 = new ComboBox();
+                ComboBoxWLabel comboBox3 = new ComboBoxWLabel();
+                comboBox3.Label = "isRandomPattern";
                 comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox3.Items.Add("vrai");
@@ -469,8 +469,8 @@ namespace PiouMaker
                 //on ajoute la propriétée "infinie" du niveau
                 PropertyView property2 = new PropertyView();
                 property2.setPanelString("Est infini :");
-                property2.PropertyName = "isInfinite";
-                ComboBox comboBox2 = new ComboBox();
+                ComboBoxWLabel comboBox2 = new ComboBoxWLabel();
+                comboBox2.Label = "isInfinite";
                 comboBox2.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox2.Items.Add("vrai");
@@ -492,8 +492,8 @@ namespace PiouMaker
                 //on ajoute la propriétée "random" du niveau
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Est aléatoire : ");
-                property3.PropertyName = "isRandomLevel";
-                ComboBox comboBox3 = new ComboBox();
+                ComboBoxWLabel comboBox3 = new ComboBoxWLabel();
+                comboBox3.Label = "isRandomLevel";
                 comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox3.Items.Add("vrai");
@@ -527,8 +527,8 @@ namespace PiouMaker
 
                 PropertyView property1 = new PropertyView();
                 property1.setPanelString("Type d'ennemi :");
-                property1.PropertyName = "enemyType";
-                ComboBox comboBox1 = new ComboBox();
+                ComboBoxWLabel comboBox1 = new ComboBoxWLabel();
+                comboBox1.Label = "enemyType";
                 comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox1.Items.Add("roaming enemy");
                 comboBox1.Items.Add("shooting enemy");
@@ -558,8 +558,8 @@ namespace PiouMaker
 
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Auto Aim :");
-                property3.PropertyName = "isAutoAim";
-                ComboBox comboBox3 = new ComboBox();
+                ComboBoxWLabel comboBox3 = new ComboBoxWLabel();
+                comboBox3.Label = "isAutoAim";
                 comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox3.Items.Add("Faux");
@@ -586,8 +586,8 @@ namespace PiouMaker
 
                 PropertyView property2 = new PropertyView();
                 property2.setPanelString("Côté d'apparition :");
-                property2.PropertyName = "apparitionSide";
-                ComboBox comboBox2 = new ComboBox();
+                ComboBoxWLabel comboBox2 = new ComboBoxWLabel();
+                comboBox2.Label = "apparitionSide";
                 comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox2.Items.Add("haut");
                 comboBox2.Items.Add("bas");
@@ -617,8 +617,8 @@ namespace PiouMaker
 
                 PropertyView propertyDirection = new PropertyView();
                 propertyDirection.setPanelString("Saisir la direction ?");
-                propertyDirection.PropertyName = "mustSetDirection";
-                ComboBox comboBoxDirection = new ComboBox();
+                ComboBoxWLabel comboBoxDirection = new ComboBoxWLabel();
+                comboBoxDirection.Label = "mustSetDirection";
                 comboBoxDirection.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBoxDirection.Items.Add("non");
                 comboBoxDirection.Items.Add("oui");
@@ -811,8 +811,8 @@ namespace PiouMaker
         {
             PropertyView property = new PropertyView();
             property.setPanelString(propertyName);
-            property.PropertyName = statLinked;
-            TextBox textBox = new TextBox();
+            TextBoxWLabel textBox = new TextBoxWLabel();
+            textBox.Label = statLinked;
             textBox.Leave += textBox_Leave;
             textBox.Text = baseValue;
             property.setControl(textBox);
