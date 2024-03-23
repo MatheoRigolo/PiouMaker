@@ -27,7 +27,7 @@ namespace PiouMaker
     {
         Level? currentLevel;
         XMLManager xmlManager;
-        List<PropertyView> properties;
+        Dictionary<string, PropertyView> properties;
 
         Pattern? selectedPattern;
         Wave? selectedWave;
@@ -390,6 +390,11 @@ namespace PiouMaker
             for (int i = 0; i < patternNames.Count; i++)
             {
                 patternList.Nodes.Add(patternNames[i]);
+                if (selectedPattern != null && selectedPattern.getPatternName() == patternNames[i])
+                {
+                    patternList.SelectedNode = patternList.Nodes[i];
+                    patternList.SelectedNode.Nodes.Clear();
+                }
             }
             List<Pattern> patterns = currentLevel.getPatterns();
             for (int i = 0; i < patterns.Count; i++)
@@ -417,8 +422,7 @@ namespace PiouMaker
 
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Est aléatoire :");
-                ComboBoxWLabel comboBox3 = new ComboBoxWLabel();
-                comboBox3.Label = "isRandomPattern";
+                ComboBox comboBox3 = new ComboBox();
                 comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox3.Items.Add("vrai");
@@ -434,7 +438,7 @@ namespace PiouMaker
                 }
                 property3.setControl(comboBox3);
                 property3.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property3);
+                properties.Add("isRandomPattern", property3);
 
                 PropertyView property4 = new PropertyView();
                 property4.setPanelString("Nombre de vagues :");
@@ -443,7 +447,7 @@ namespace PiouMaker
                 textBox4.Text = currentLevel.getPattern(patternList.SelectedNode.Index).getPatternWaves().Count.ToString();
                 property4.setControl(textBox4);
                 property4.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property4);
+                properties.Add("numberOfWaves", property4);
             }
             else if (!isLevelProperties && patternList.SelectedNode != null && patternList.SelectedNode.Parent != null && selectedEnemy == null)
             {
@@ -457,7 +461,7 @@ namespace PiouMaker
                 textBox2.Text = selectedWave.EnemyList.Count.ToString();
                 property2.setControl(textBox2);
                 property2.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property2);
+                properties.Add("numberOfEnnemies", property2);
             }
             else if (isLevelProperties)
             {
@@ -469,8 +473,7 @@ namespace PiouMaker
                 //on ajoute la propriétée "infinie" du niveau
                 PropertyView property2 = new PropertyView();
                 property2.setPanelString("Est infini :");
-                ComboBoxWLabel comboBox2 = new ComboBoxWLabel();
-                comboBox2.Label = "isInfinite";
+                ComboBox comboBox2 = new ComboBox();
                 comboBox2.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox2.Items.Add("vrai");
@@ -486,14 +489,13 @@ namespace PiouMaker
                 }
                 property2.setControl(comboBox2);
                 property2.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property2);
+                properties.Add("isInfinite", property2);
 
 
                 //on ajoute la propriétée "random" du niveau
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Est aléatoire : ");
-                ComboBoxWLabel comboBox3 = new ComboBoxWLabel();
-                comboBox3.Label = "isRandomLevel";
+                ComboBox comboBox3 = new ComboBox();
                 comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox3.Items.Add("vrai");
@@ -509,7 +511,7 @@ namespace PiouMaker
                 }
                 property3.setControl(comboBox3);
                 property3.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property3);
+                properties.Add("isRandomLevel", property3);
 
                 //On ajoute le nombre de pattern
                 PropertyView property4 = new PropertyView();
@@ -519,7 +521,7 @@ namespace PiouMaker
                 textBox4.Text = currentLevel.getPatterns().Count.ToString();
                 property4.setControl(textBox4);
                 property4.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property4);
+                properties.Add("numberOfPatterns", property4);
             }
             else if (selectedEnemy != null)
             {
@@ -527,8 +529,7 @@ namespace PiouMaker
 
                 PropertyView property1 = new PropertyView();
                 property1.setPanelString("Type d'ennemi :");
-                ComboBoxWLabel comboBox1 = new ComboBoxWLabel();
-                comboBox1.Label = "enemyType";
+                ComboBox comboBox1 = new ComboBox();
                 comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox1.Items.Add("roaming enemy");
                 comboBox1.Items.Add("shooting enemy");
@@ -552,14 +553,13 @@ namespace PiouMaker
                 comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
                 property1.setControl(comboBox1);
                 property1.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property1);
+                properties.Add("enemyType", property1);
 
                 addProperty("Délai d'apparition :", selectedEnemy.SpawnTime.ToString(System.Globalization.CultureInfo.InvariantCulture), "spawnTime");
 
                 PropertyView property3 = new PropertyView();
                 property3.setPanelString("Auto Aim :");
-                ComboBoxWLabel comboBox3 = new ComboBoxWLabel();
-                comboBox3.Label = "isAutoAim";
+                ComboBox comboBox3 = new ComboBox();
                 comboBox3.SelectedIndexChanged += comboBox_SelectedIndexChanged;
                 comboBox3.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox3.Items.Add("Faux");
@@ -574,7 +574,7 @@ namespace PiouMaker
                 }
                 property3.setControl(comboBox3);
                 property3.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property3);
+                properties.Add("isAutoAim", property3);
 
                 addProperty("Dégats :", selectedEnemy.Damage.ToString(), "damage");
                 addProperty("Dégats par balle :", selectedEnemy.DamagePerBullet.ToString(), "damagePerBullet");
@@ -582,12 +582,11 @@ namespace PiouMaker
                 addProperty("Vitesse des balles :", selectedEnemy.BulletSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "bulletSpeed");
                 addProperty("Points de vie :", selectedEnemy.Health.ToString(), "health");
                 addProperty("Score gagné :", selectedEnemy.ScoreGived.ToString(), "scoreGived");
-                addProperty("Vitesse de déplacement :", selectedEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "movementSpeed");
+                addProperty("Vitesse de déplacement :", selectedEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "moveSpeed");
 
                 PropertyView property2 = new PropertyView();
                 property2.setPanelString("Côté d'apparition :");
-                ComboBoxWLabel comboBox2 = new ComboBoxWLabel();
-                comboBox2.Label = "apparitionSide";
+                ComboBox comboBox2 = new ComboBox();
                 comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox2.Items.Add("haut");
                 comboBox2.Items.Add("bas");
@@ -611,14 +610,13 @@ namespace PiouMaker
                 comboBox2.SelectedIndexChanged += ApparitionSide_SelectedIndexChanged;
                 property2.setControl(comboBox2);
                 property2.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(property2);
+                properties.Add("apparitionSide", property2);
 
                 addProperty("xp donnée :", selectedEnemy.XpGived.ToString(), "xpGived");
 
                 PropertyView propertyDirection = new PropertyView();
                 propertyDirection.setPanelString("Saisir la direction ?");
-                ComboBoxWLabel comboBoxDirection = new ComboBoxWLabel();
-                comboBoxDirection.Label = "mustSetDirection";
+                ComboBox comboBoxDirection = new ComboBox();
                 comboBoxDirection.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBoxDirection.Items.Add("non");
                 comboBoxDirection.Items.Add("oui");
@@ -633,14 +631,16 @@ namespace PiouMaker
                 comboBoxDirection.SelectedIndexChanged += mustSetDirection_SelectedIndexChanged;
                 propertyDirection.setControl(comboBoxDirection);
                 propertyDirection.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-                properties.Add(propertyDirection);
+                properties.Add("mustSetDirection", propertyDirection);
             }
 
             propertiesPanel.Controls.Clear();
-            for (int i = 0; i < properties.Count; i++)
+
+            var val = properties.Keys.ToList();
+            foreach (var key in val)
             {
-                propertiesPanel.Controls.Add(properties[i].getLabel());
-                propertiesPanel.Controls.Add(properties[i].getControl());
+                propertiesPanel.Controls.Add(properties[key].getLabel());
+                propertiesPanel.Controls.Add(properties[key].getControl());
             }
         }
 
@@ -648,7 +648,7 @@ namespace PiouMaker
 
         private void initProperties()
         {
-            properties = new List<PropertyView>();
+            properties = new Dictionary<string, PropertyView>();
         }
 
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -811,20 +811,19 @@ namespace PiouMaker
         {
             PropertyView property = new PropertyView();
             property.setPanelString(propertyName);
-            TextBoxWLabel textBox = new TextBoxWLabel();
-            textBox.Label = statLinked;
+            TextBox textBox = new TextBox();
             textBox.Leave += textBox_Leave;
             textBox.Text = baseValue;
             property.setControl(textBox);
             property.setPos(propertiesPanel.DisplayRectangle, properties.Count);
-            properties.Add(property);
+            properties.Add(statLinked, property);
         }
         private void ComboBox1_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (selectedEnemy != null)
             {
                 int index = selectedWave.EnemyList.IndexOf(selectedEnemy);
-                string newType = properties[0].getControl().Text;
+                string newType = properties["enemyType"].getControl().Text;
                 switch (newType)
                 {
                     case "bomber":
@@ -897,7 +896,7 @@ namespace PiouMaker
         {
             if (selectedEnemy != null)
             {
-                switch (properties[12].getControl().Text)
+                switch (properties["mustSetDirection"].getControl().Text)
                 {
                     case "oui":
                         crossPictureBox.Visible = true;
@@ -915,8 +914,8 @@ namespace PiouMaker
             {
 
                 int index = selectedWave.EnemyList.IndexOf(selectedEnemy);
-                selectedEnemy.ApparitionDirection = properties[10].getControl().Text;
-                switch (properties[10].getControl().Text)
+                selectedEnemy.ApparitionDirection = properties["apparitionSide"].getControl().Text;
+                switch (properties["apparitionSide"].getControl().Text)
                 {
                     case "gauche":
                         enemyPicures[index].Angle = 180f;
@@ -1014,10 +1013,10 @@ namespace PiouMaker
         {
             try
             {
-                if (properties.Count == 4 && properties[0].getLabel().Text == "Nom du niveau :")
+                if (properties.Count == 4 && selectedPattern == null)
                 {
                     //on a les propriétés d'un niveau
-                    currentLevel.updateLevelWStrings(properties[0].getControl().Text, properties[1].getControl().Text, properties[2].getControl().Text);
+                    currentLevel.updateLevelWStrings(properties["levelName"].getControl().Text, properties["isInfinite"].getControl().Text, properties["isRandomLevel"].getControl().Text);
 
                     // On modifie le nom du niveau
                     string src = currentLevel.getFilePath();
@@ -1025,7 +1024,7 @@ namespace PiouMaker
 
                     string dest = src.Substring(0, src.LastIndexOf("\\") + 1);
 
-                    currentLevel.setLevelName(properties[0].getControl().Text);
+                    currentLevel.setLevelName(properties["levelName"].getControl().Text);
                     dest += currentLevel.getLevelName() + ".piou";
                     currentLevel.setFilePath(dest);
 
@@ -1039,71 +1038,38 @@ namespace PiouMaker
                     refreshPatternList();
                     refreshProperties(true);
                 }
-                else if (properties.Count == 4 && properties[0].getLabel().Text == "Nom du pattern :")
+                else if (properties.Count == 4 && selectedWave == null)
                 {
                     //on a les propriétés d'un pattern
-                    currentLevel.getPattern(patternList.SelectedNode.Index).updatePatternWString(properties[0].getControl().Text, properties[1].getControl().Text, properties[2].getControl().Text);
-                    //refreshPatternList();
+                    currentLevel.getPattern(patternList.SelectedNode.Index).updatePatternWString(properties["patternName"].getControl().Text, properties["order"].getControl().Text, properties["isRandomPattern"].getControl().Text);
+                    refreshPatternList();
                 }
-                else if (properties.Count == 2 && properties[1].getLabel().Text == "Nombre d'ennemis :")
+                else if (properties.Count == 2 && selectedEnemy == null)
                 {
                     //on a les propriétés d'une wave
-                    currentLevel.getPattern(patternList.SelectedNode.Parent.Index).getWave(patternList.SelectedNode.Index).setDuration(properties[0].getControl().Text);
+                    currentLevel.getPattern(patternList.SelectedNode.Parent.Index).getWave(patternList.SelectedNode.Index).setDuration(properties["duration"].getControl().Text);
                     //refreshPatternList();
                 }
                 else if (properties.Count > 0 && selectedEnemy != null)
                 {
-                    // On modifie les proprétés d'un ennemi
-                    string typeText = properties[0].getControl().Text;
-                    string enemyType = "";
-                    switch (typeText)
-                    {
-                        case "roaming enemy":
-                            enemyType = "roamingEnemy";
-                            break;
-                        case "shooting enemy":
-                            enemyType = "shootingEnemy";
-                            break;
-                        case "rusher":
-                            enemyType = typeText;
-                            break;
-                        case "bomber":
-                            enemyType = typeText; ;
-                            break;
-                    }
-                    selectedEnemy.EnemyType = enemyType;
+                    selectedEnemy.SpawnTime = float.Parse(properties["spawnTime"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
 
-                    selectedEnemy.SpawnTime = float.Parse(properties[1].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    selectedEnemy.Damage = int.Parse(properties["damage"].getControl().Text);
+                    selectedEnemy.DamagePerBullet = int.Parse(properties["damagePerBullet"].getControl().Text);
+                    selectedEnemy.AttackSpeed = float.Parse(properties["attackSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    selectedEnemy.BulletSpeed = float.Parse(properties["bulletSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
+                    selectedEnemy.Health = int.Parse(properties["health"].getControl().Text);
+                    selectedEnemy.ScoreGived = int.Parse(properties["scoreGived"].getControl().Text);
+                    selectedEnemy.MoveSpeed = float.Parse(properties["moveSpeed"].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
 
-                    switch (properties[2].getControl().Text)
-                    {
-                        case "Vrai":
-                            selectedEnemy.AutoAim = true;
-                            break;
-                        case "Faux":
-                            selectedEnemy.AutoAim = false;
-                            break;
-                    }
-
-                    selectedEnemy.Damage = int.Parse(properties[3].getControl().Text);
-                    selectedEnemy.DamagePerBullet = int.Parse(properties[4].getControl().Text);
-                    selectedEnemy.AttackSpeed = float.Parse(properties[5].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
-                    selectedEnemy.BulletSpeed = float.Parse(properties[6].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
-                    selectedEnemy.Health = int.Parse(properties[7].getControl().Text);
-                    selectedEnemy.ScoreGived = int.Parse(properties[8].getControl().Text);
-                    selectedEnemy.MoveSpeed = float.Parse(properties[9].getControl().Text, System.Globalization.CultureInfo.InvariantCulture);
-
-                    selectedEnemy.ApparitionDirection = properties[10].getControl().Text;
-                    selectedEnemy.XpGived = int.Parse(properties[11].getControl().Text);
-
-                    selectedEnemy.MustSetDirection = properties[12].getControl().Text == "oui";
+                    selectedEnemy.XpGived = int.Parse(properties["xpGived"].getControl().Text);
                 }
                 //refreshProperties();
             }
             catch (Exception ex)
             {
                 //Pas cool
-                string message = "Erreur dans la saisie des données";
+                string message = "Erreur dans la saisie des données : " + ex;
                 string title = "Erreur";
                 MessageBoxButtons buttons = MessageBoxButtons.OK;
                 DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
@@ -1140,40 +1106,41 @@ namespace PiouMaker
             ComboBox? comboBoxModified = sender as ComboBox;
             if (comboBoxModified != null)
             {
-                int index = -1;
-                for (int i=0; i<properties.Count; i++)
+                string indexKey = "";
+                var val = properties.Keys.ToList();
+                foreach (var key in val)
                 {
-                    if (comboBoxModified == properties[i].getControl())
+                    if (comboBoxModified == properties[key].getControl())
                     {
-                        index = i; 
+                        indexKey = key;
                         break;
                     }
                 }
                 if (selectedPattern == null)
                 {
                     // Level
-                    if (index == 1)
+                    if (indexKey == "isInfinite")
                     {
-                        currentLevel.setIsInfinite(properties[index].getControl().Text == "vrai");
+                        currentLevel.setIsInfinite(properties[indexKey].getControl().Text == "vrai");
                     }
-                    else if (index ==2)
+                    else if (indexKey == "isRandomLevel")
                     {
-                        currentLevel.setIsRandom(properties[index].getControl().Text == "vrai");
+                        currentLevel.setIsRandom(properties[indexKey].getControl().Text == "vrai");
                     }
                 }
                 else if (selectedWave == null)
                 {
                     // Niveau
-                    if (index == 2)
+                    if (indexKey == "isRandomPattern")
                     {
-                        selectedPattern.setIsRandom(properties[index].getControl().Text == "vrai");
+                        selectedPattern.setIsRandom(properties[indexKey].getControl().Text == "vrai");
                     }
                 }
                 else if (selectedEnemy != null)
                 {
-                    if (index == 2)
+                    if (indexKey == "autoAim")
                     {
-                        selectedEnemy.AutoAim = properties[index].getControl().Text == "Vrai";
+                        selectedEnemy.AutoAim = properties[indexKey].getControl().Text == "Vrai";
                     }
                 }
             }
