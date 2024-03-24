@@ -933,7 +933,10 @@ namespace PiouMaker
                 selectedEnemy.MustSetDirection = properties["mustSetDirection"].getControl().Text == "oui";
                 if (selectedEnemy.MustSetDirection)
                 {
+                    gamePanel.Controls.Add(crossPictureBox);
+                    gamePanel.Controls[gamePanel.Controls.Count - 1].BringToFront();
                     crossPictureBox.Visible = true;
+                    crossPictureBox.Location = new Point((int)((float)(selectedEnemy.Direction.X) / 100f * (float)gamePanel.Width), (int)((float)(selectedEnemy.Direction.Y) / 100f * (float)gamePanel.Height));
                 }
                 else
                 {
