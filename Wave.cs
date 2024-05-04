@@ -11,6 +11,9 @@ namespace PiouMaker
         private List<Enemy> enemyList;
         private int duration = -1;
 
+        public List<Enemy> EnemyList { get => enemyList; set => enemyList = value; }
+        public int Duration { get => duration; set => duration = value; }
+
         public Wave()
         {
             enemyList = new List<Enemy>();
@@ -39,12 +42,6 @@ namespace PiouMaker
         }
 
         public void addEnemy(Enemy enemy) {  enemyList.Add(enemy); }
-        public void setEnemyList(List<Enemy> enemyList)
-        {
-            this.enemyList = enemyList;
-        }
-
-        public List<Enemy> getEnemyList() {  return enemyList; }
 
         public Enemy getEnemy (int index)
         {

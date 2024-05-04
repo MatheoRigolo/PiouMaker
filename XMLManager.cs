@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace PiouMaker
 {
     internal class XMLManager
     {
-        private Level level;
+        public Level level;
 
         public XMLManager(Level level)
         {
@@ -79,13 +80,12 @@ namespace PiouMaker
                             // Récupérer les attributs de l'ennemi
                             if (enemyNode.Attributes["type"] != null)
                             {
-                                enemyToAdd.setEnemyType(enemyNode.Attributes["type"].Value);
+                                enemyToAdd.EnemyType = enemyNode.Attributes["type"].Value;
                             }
                             if (enemyNode.Attributes["pos"] != null)
                             {
                                 string pos = enemyNode.Attributes["pos"].Value;
                                 string[] elements = pos.Split(";");
-                                // Ici, c'est des 50%, a revoir
                                 string X;
                                 string Y;
                                 string[] posXParsed = elements[0].Split("%");
@@ -96,14 +96,14 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["spawnTime"] != null)
                             {
-                                enemyToAdd.setSpawnTime(int.Parse(enemyNode.Attributes["spawnTime"].Value));
+                                enemyToAdd.SpawnTime = float.Parse(enemyNode.Attributes["spawnTime"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             // Lire le reste des attributs
                             if (enemyNode.Attributes["autoAim"] != null)
                             {
-                                switch(enemyNode.Attributes["spawnTime"].Value)
+                                switch(enemyNode.Attributes["autoAim"].Value)
                                 {
-                                    case "true":
+                                    case "1":
                                         enemyToAdd.AutoAim = true; 
                                         break;
                                     default:
@@ -121,11 +121,11 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["attackSpeed"] != null)
                             {
-                                enemyToAdd.AttackSpeed = float.Parse(enemyNode.Attributes["attackSpeed"].Value);
+                                enemyToAdd.AttackSpeed = float.Parse(enemyNode.Attributes["attackSpeed"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             if (enemyNode.Attributes["bulletSpeed"] != null)
                             {
-                                enemyToAdd.BulletSpeed = float.Parse(enemyNode.Attributes["bulletSpeed"].Value);
+                                enemyToAdd.BulletSpeed = float.Parse(enemyNode.Attributes["bulletSpeed"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             if (enemyNode.Attributes["health"] != null)
                             {
@@ -137,11 +137,33 @@ namespace PiouMaker
                             }
                             if (enemyNode.Attributes["moveSpeed"] != null)
                             {
-                                enemyToAdd.MoveSpeed = float.Parse(enemyNode.Attributes["moveSpeed"].Value);
+                                enemyToAdd.MoveSpeed = float.Parse(enemyNode.Attributes["moveSpeed"].Value, System.Globalization.CultureInfo.InvariantCulture);
                             }
                             if (enemyNode.Attributes["apparitionDirection"] != null)
                             {
                                 enemyToAdd.ApparitionDirection = enemyNode.Attributes["apparitionDirection"].Value;
+                            }
+                            if (enemyNode.Attributes["xpGived"] != null)
+                            {
+                                enemyToAdd.XpGived = int.Parse(enemyNode.Attributes["xpGived"].Value);
+                            }
+                            if (enemyNode.Attributes["mustSetDirection"] != null)
+                            {
+                                switch (enemyNode.Attributes["mustSetDirection"].Value)
+                                {
+                                    case "1":
+                                        enemyToAdd.MustSetDirection = true;
+                                        break;
+                                    default:
+                                        enemyToAdd.MustSetDirection = false;
+                                        break;
+                                }
+                            }
+                            if (enemyNode.Attributes["direction"] != null)
+                            {
+                                string dir = enemyNode.Attributes["direction"].Value;
+                                string[] dirParsed = dir.Split(";");
+                                enemyToAdd.Direction = new Point(int.Parse(dirParsed[0]), int.Parse(dirParsed[1]));
                             }
                             waveToadd.addEnemy(enemyToAdd);
                         }
@@ -199,30 +221,35 @@ namespace PiouMaker
                     {
                         xmlWriter.WriteAttributeString("duration", currentWave.getDuration().ToString());
                     }
-                    for (int u = 0; u < currentWave.getEnemyList().Count; u++)
+                    for (int u = 0; u < currentWave.EnemyList.Count; u++)
                     {
-                        Enemy currentEnemy = currentWave.getEnemyList()[u];
+                        Enemy currentEnemy = currentWave.EnemyList[u];
                         xmlWriter.WriteStartElement("enemy");
-                        if (currentEnemy.getSpawnTime() != -1)
+                        if (currentEnemy.SpawnTime != -1)
                         {
-                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.getSpawnTime().ToString());
+                            xmlWriter.WriteAttributeString("spawnTime", currentEnemy.SpawnTime.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         }
-                        xmlWriter.WriteAttributeString("type", currentEnemy.getEnemyType());
+                        xmlWriter.WriteAttributeString("type", currentEnemy.EnemyType);
                         string posString = currentEnemy.getPos().X + "%;" + currentEnemy.getPos().Y+"%";
                         xmlWriter.WriteAttributeString("pos", posString);
                         if (currentEnemy.AutoAim)
                         {
-                            xmlWriter.WriteAttributeString("autoAim", "true");
+                            xmlWriter.WriteAttributeString("autoAim", "1");
                         }
                         xmlWriter.WriteAttributeString("damage", currentEnemy.Damage.ToString());
                         xmlWriter.WriteAttributeString("damagePerBullet", currentEnemy.DamagePerBullet.ToString());
-                        xmlWriter.WriteAttributeString("attackSpeed", currentEnemy.AttackSpeed.ToString());
-                        xmlWriter.WriteAttributeString("bulletSpeed", currentEnemy.BulletSpeed.ToString());
+                        xmlWriter.WriteAttributeString("attackSpeed", currentEnemy.AttackSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        xmlWriter.WriteAttributeString("bulletSpeed", currentEnemy.BulletSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         xmlWriter.WriteAttributeString("health", currentEnemy.Health.ToString());
                         xmlWriter.WriteAttributeString("scoreGived", currentEnemy.ScoreGived.ToString());
-                        xmlWriter.WriteAttributeString("moveSpeed", currentEnemy.MoveSpeed.ToString());
+                        xmlWriter.WriteAttributeString("moveSpeed", currentEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         xmlWriter.WriteAttributeString("apparitionDirection", currentEnemy.ApparitionDirection);
-                        xmlWriter.WriteAttributeString("direction", currentEnemy.Direction.X + ";" + currentEnemy.Direction.Y);
+                        xmlWriter.WriteAttributeString("direction", currentEnemy.Direction.X.ToString() + ";" + currentEnemy.Direction.Y.ToString());
+                        xmlWriter.WriteAttributeString("xpGived", currentEnemy.XpGived.ToString());
+                        if (currentEnemy.MustSetDirection)
+                        {
+                            xmlWriter.WriteAttributeString("mustSetDirection", "1");
+                        }
                         xmlWriter.WriteEndElement();
                     }
                     xmlWriter.WriteEndElement();

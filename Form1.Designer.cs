@@ -39,7 +39,6 @@
             gameBackground = new PictureBox();
             patternList = new TreeView();
             propertiesPanel = new Panel();
-            modifyPropertyButton = new Button();
             label1 = new Label();
             levelName = new Label();
             saveButton = new Button();
@@ -52,11 +51,21 @@
             supprimerLePatternToolStripMenuItem = new ToolStripMenuItem();
             supprimerLaVagueToolStripMenuItem = new ToolStripMenuItem();
             supprimerLennemiToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1 = new MenuStrip();
+            fichierToolStripMenuItem = new ToolStripMenuItem();
+            ouvrirUnNiveauToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            créerUnNiveauToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            enregistrerLeNiveauToolStripMenuItem = new ToolStripMenuItem();
+            crossPictureBox = new PictureBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             gamePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gameBackground).BeginInit();
             contextMenuPattern.SuspendLayout();
+            menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)crossPictureBox).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -99,9 +108,9 @@
             enemies.ColorDepth = ColorDepth.Depth32Bit;
             enemies.ImageStream = (ImageListStreamer)resources.GetObject("enemies.ImageStream");
             enemies.TransparentColor = Color.Transparent;
-            enemies.Images.SetKeyName(0, "enemy.png");
-            enemies.Images.SetKeyName(1, "lance-bombe.png");
-            enemies.Images.SetKeyName(2, "shootingEnemySolo.png");
+            enemies.Images.SetKeyName(0, "roamingEnemyImage");
+            enemies.Images.SetKeyName(1, "bomberImage");
+            enemies.Images.SetKeyName(2, "shootingEnemyImage");
             // 
             // tabPage2
             // 
@@ -118,7 +127,8 @@
             gamePanel.AllowDrop = true;
             gamePanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             gamePanel.BackColor = Color.Transparent;
-            gamePanel.BackgroundImageLayout = ImageLayout.Stretch;
+            gamePanel.BackgroundImage = Properties.Resources.parallax_mountain_bg;
+            gamePanel.BackgroundImageLayout = ImageLayout.Zoom;
             gamePanel.Controls.Add(gameBackground);
             gamePanel.Location = new Point(189, 14);
             gamePanel.Name = "gamePanel";
@@ -130,20 +140,21 @@
             // 
             // gameBackground
             // 
-            gameBackground.BackgroundImage = Properties.Resources.parallax_mountain_bg;
             gameBackground.BackgroundImageLayout = ImageLayout.Stretch;
             gameBackground.Dock = DockStyle.Fill;
             gameBackground.Location = new Point(0, 0);
             gameBackground.Name = "gameBackground";
             gameBackground.Size = new Size(571, 363);
+            gameBackground.SizeMode = PictureBoxSizeMode.Zoom;
             gameBackground.TabIndex = 0;
             gameBackground.TabStop = false;
             // 
             // patternList
             // 
-            patternList.Location = new Point(12, 74);
+            patternList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            patternList.Location = new Point(12, 84);
             patternList.Name = "patternList";
-            patternList.Size = new Size(158, 303);
+            patternList.Size = new Size(158, 293);
             patternList.TabIndex = 9;
             patternList.Visible = false;
             patternList.AfterSelect += patternList_AfterSelect;
@@ -155,27 +166,17 @@
             propertiesPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             propertiesPanel.AutoScroll = true;
             propertiesPanel.BackColor = Color.White;
-            propertiesPanel.Location = new Point(791, 41);
+            propertiesPanel.Location = new Point(791, 54);
             propertiesPanel.Name = "propertiesPanel";
-            propertiesPanel.Size = new Size(206, 311);
+            propertiesPanel.Size = new Size(206, 323);
             propertiesPanel.TabIndex = 3;
-            // 
-            // modifyPropertyButton
-            // 
-            modifyPropertyButton.Location = new Point(837, 358);
-            modifyPropertyButton.Name = "modifyPropertyButton";
-            modifyPropertyButton.Size = new Size(114, 29);
-            modifyPropertyButton.TabIndex = 11;
-            modifyPropertyButton.Text = "Modifier";
-            modifyPropertyButton.UseVisualStyleBackColor = true;
-            modifyPropertyButton.Visible = false;
-            modifyPropertyButton.Click += modifyPropertyButton_Click;
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline);
-            label1.Location = new Point(849, 14);
+            label1.Location = new Point(850, 28);
             label1.Name = "label1";
             label1.Size = new Size(81, 20);
             label1.TabIndex = 0;
@@ -185,7 +186,7 @@
             // 
             levelName.BorderStyle = BorderStyle.FixedSingle;
             levelName.Cursor = Cursors.Hand;
-            levelName.Location = new Point(12, 14);
+            levelName.Location = new Point(12, 28);
             levelName.Name = "levelName";
             levelName.Size = new Size(158, 46);
             levelName.TabIndex = 5;
@@ -206,6 +207,7 @@
             // 
             // openLevelButton
             // 
+            openLevelButton.Anchor = AnchorStyles.Left;
             openLevelButton.Location = new Point(12, 127);
             openLevelButton.Name = "openLevelButton";
             openLevelButton.Size = new Size(158, 29);
@@ -216,6 +218,7 @@
             // 
             // createLevelButton
             // 
+            createLevelButton.Anchor = AnchorStyles.Left;
             createLevelButton.Location = new Point(12, 189);
             createLevelButton.Name = "createLevelButton";
             createLevelButton.Size = new Size(158, 29);
@@ -272,13 +275,78 @@
             supprimerLennemiToolStripMenuItem.Text = "Supprimer l'ennemi";
             supprimerLennemiToolStripMenuItem.Visible = false;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fichierToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1019, 28);
+            menuStrip1.TabIndex = 12;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fichierToolStripMenuItem
+            // 
+            fichierToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ouvrirUnNiveauToolStripMenuItem, toolStripSeparator1, créerUnNiveauToolStripMenuItem, toolStripSeparator2, enregistrerLeNiveauToolStripMenuItem });
+            fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
+            fichierToolStripMenuItem.Size = new Size(66, 24);
+            fichierToolStripMenuItem.Text = "Fichier";
+            // 
+            // ouvrirUnNiveauToolStripMenuItem
+            // 
+            ouvrirUnNiveauToolStripMenuItem.Name = "ouvrirUnNiveauToolStripMenuItem";
+            ouvrirUnNiveauToolStripMenuItem.Size = new Size(226, 26);
+            ouvrirUnNiveauToolStripMenuItem.Text = "Ouvrir un niveau";
+            ouvrirUnNiveauToolStripMenuItem.Click += ouvrirUnNiveauToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(223, 6);
+            // 
+            // créerUnNiveauToolStripMenuItem
+            // 
+            créerUnNiveauToolStripMenuItem.Name = "créerUnNiveauToolStripMenuItem";
+            créerUnNiveauToolStripMenuItem.Size = new Size(226, 26);
+            créerUnNiveauToolStripMenuItem.Text = "Créer un niveau";
+            créerUnNiveauToolStripMenuItem.Click += créerUnNiveauToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(223, 6);
+            // 
+            // enregistrerLeNiveauToolStripMenuItem
+            // 
+            enregistrerLeNiveauToolStripMenuItem.Name = "enregistrerLeNiveauToolStripMenuItem";
+            enregistrerLeNiveauToolStripMenuItem.Size = new Size(226, 26);
+            enregistrerLeNiveauToolStripMenuItem.Text = "Enregistrer le niveau";
+            enregistrerLeNiveauToolStripMenuItem.Click += enregistrerLeNiveauToolStripMenuItem_Click;
+            // 
+            // crossPictureBox
+            // 
+            crossPictureBox.BackColor = Color.Transparent;
+            crossPictureBox.Image = Properties.Resources.Cross;
+            crossPictureBox.Location = new Point(166, 224);
+            crossPictureBox.Name = "crossPictureBox";
+            crossPictureBox.Size = new Size(45, 45);
+            crossPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            crossPictureBox.TabIndex = 13;
+            crossPictureBox.TabStop = false;
+            crossPictureBox.Visible = false;
+            crossPictureBox.MouseDown += PictureBox1_MouseDown;
+            crossPictureBox.MouseMove += PictureBox1_MouseMove;
+            crossPictureBox.MouseUp += cross_MouseUp;
+            // 
             // Form1
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
             ClientSize = new Size(1019, 520);
-            Controls.Add(modifyPropertyButton);
+            Controls.Add(crossPictureBox);
+            Controls.Add(menuStrip1);
             Controls.Add(createLevelButton);
             Controls.Add(openLevelButton);
             Controls.Add(saveButton);
@@ -289,14 +357,20 @@
             Controls.Add(tabControl1);
             Controls.Add(label1);
             DoubleBuffered = true;
+            KeyPreview = true;
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "PiouMaker";
             Load += Form1_Load;
+            KeyDown += Form1_KeyDown;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             gamePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gameBackground).EndInit();
             contextMenuPattern.ResumeLayout(false);
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)crossPictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -317,7 +391,6 @@
         private Button openLevelButton;
         private Button createLevelButton;
         private OpenFileDialog openFileDialog1;
-        private Button modifyPropertyButton;
         private TreeView patternList;
         private ContextMenuStrip contextMenuPattern;
         private ToolStripMenuItem ajouterUnPatternToolStripMenuItem;
@@ -326,5 +399,13 @@
         private ToolStripMenuItem supprimerLaVagueToolStripMenuItem;
         private ToolStripMenuItem supprimerLennemiToolStripMenuItem;
         private PictureBox gameBackground;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fichierToolStripMenuItem;
+        private ToolStripMenuItem ouvrirUnNiveauToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem créerUnNiveauToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem enregistrerLeNiveauToolStripMenuItem;
+        private PictureBox crossPictureBox;
     }
 }

@@ -13,8 +13,8 @@ namespace PiouMaker
         /// possibilities : roamingEnemy, shootingEnemy, bomber, rusher
         /// </summary>
         private string enemyType = "roamingEnemy";
-        private Vector2 pos = new Vector2(0,0);
-        private int spawnTime = 0;
+        private Point pos = new Point(0,0);
+        private float spawnTime = 0;
 
         private bool autoAim = false;
         private int damage = 3;
@@ -29,7 +29,10 @@ namespace PiouMaker
         /// Valeures possibles : droite, gauche, haut, bas
         /// </summary>
         private string apparitionDirection = "droite";
-        private Vector2 direction = new Vector2(-1,0);
+        private Point direction = new Point(0,0);
+
+        private int xpGived = 4;
+        private bool mustSetDirection = false;
 
         public bool AutoAim { get => autoAim; set => autoAim = value; }
         public int Damage { get => damage; set => damage = value; }
@@ -40,7 +43,12 @@ namespace PiouMaker
         public int ScoreGived { get => scoreGived; set => scoreGived = value; }
         public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
         public string ApparitionDirection { get => apparitionDirection; set => apparitionDirection = value; }
-        public Vector2 Direction { get => direction; set => direction = value; }
+        public Point Direction { get => direction; set => direction = value; }
+        public int XpGived { get => xpGived; set => xpGived = value; }
+        public bool MustSetDirection { get => mustSetDirection; set => mustSetDirection = value; }
+        public string EnemyType { get => enemyType; set => enemyType = value; }
+        public float SpawnTime { get => spawnTime; set => spawnTime = value; }
+        public Point Pos { get => pos; set => pos = value; }
 
         public Enemy(string enemyType)
         {
@@ -49,22 +57,14 @@ namespace PiouMaker
 
         public Enemy() { }
 
-        public string getEnemyType() { return enemyType; }
-        public void setEnemyType(string enemyType) {  this.enemyType = enemyType; }
-        public int getSpawnTime() {  return spawnTime; }
-        public void setSpawnTime(int spawnTime)
-        {
-            this.spawnTime = spawnTime;
-        }
+        public Point getPos() { return pos; }
 
-        public Vector2 getPos() { return pos; }
-
-        public void setPos(Vector2 posParam) { 
+        public void setPos(Point posParam) { 
             this.pos = posParam;
         }
         public void setPos(int x, int y)
         {
-            pos = new Vector2(x, y);
+            pos = new Point(x, y);
         }
     }
 }

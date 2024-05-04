@@ -63,6 +63,16 @@ namespace PiouMaker.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Cross {
+            get {
+                object obj = ResourceManager.GetObject("Cross", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap parallax_mountain_bg {
             get {
                 object obj = ResourceManager.GetObject("parallax-mountain-bg", resourceCulture);
