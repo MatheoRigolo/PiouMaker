@@ -73,20 +73,22 @@
             tabControl1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
-            tabControl1.Location = new Point(12, 383);
+            tabControl1.Location = new Point(10, 287);
+            tabControl1.Margin = new Padding(3, 2, 3, 2);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(748, 125);
+            tabControl1.Size = new Size(654, 94);
             tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
             tabPage1.Controls.Add(listView1);
             tabPage1.ImageKey = "(aucun)";
-            tabPage1.Location = new Point(4, 29);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Margin = new Padding(3, 2, 3, 2);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(740, 92);
+            tabPage1.Padding = new Padding(3, 2, 3, 2);
+            tabPage1.Size = new Size(646, 66);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Ennemis";
             tabPage1.UseVisualStyleBackColor = true;
@@ -96,9 +98,10 @@
             listView1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             listView1.HeaderStyle = ColumnHeaderStyle.None;
             listView1.LargeImageList = enemies;
-            listView1.Location = new Point(6, 6);
+            listView1.Location = new Point(5, 4);
+            listView1.Margin = new Padding(3, 2, 3, 2);
             listView1.Name = "listView1";
-            listView1.Size = new Size(728, 80);
+            listView1.Size = new Size(638, 61);
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.ItemDrag += ListView1_ItemDrag;
@@ -114,10 +117,11 @@
             // 
             // tabPage2
             // 
-            tabPage2.Location = new Point(4, 29);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Margin = new Padding(3, 2, 3, 2);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(740, 92);
+            tabPage2.Padding = new Padding(3, 2, 3, 2);
+            tabPage2.Size = new Size(646, 66);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Presets perso";
             tabPage2.UseVisualStyleBackColor = true;
@@ -130,9 +134,10 @@
             gamePanel.BackgroundImage = Properties.Resources.parallax_mountain_bg;
             gamePanel.BackgroundImageLayout = ImageLayout.Zoom;
             gamePanel.Controls.Add(gameBackground);
-            gamePanel.Location = new Point(189, 14);
+            gamePanel.Location = new Point(165, 10);
+            gamePanel.Margin = new Padding(3, 2, 3, 2);
             gamePanel.Name = "gamePanel";
-            gamePanel.Size = new Size(571, 363);
+            gamePanel.Size = new Size(500, 272);
             gamePanel.TabIndex = 2;
             gamePanel.Visible = false;
             gamePanel.DragDrop += gamePanel_DragDrop;
@@ -143,18 +148,21 @@
             gameBackground.BackgroundImageLayout = ImageLayout.Stretch;
             gameBackground.Dock = DockStyle.Fill;
             gameBackground.Location = new Point(0, 0);
+            gameBackground.Margin = new Padding(3, 2, 3, 2);
             gameBackground.Name = "gameBackground";
-            gameBackground.Size = new Size(571, 363);
+            gameBackground.Size = new Size(500, 272);
             gameBackground.SizeMode = PictureBoxSizeMode.Zoom;
             gameBackground.TabIndex = 0;
             gameBackground.TabStop = false;
+            gameBackground.Click += gameBackground_Click;
             // 
             // patternList
             // 
             patternList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            patternList.Location = new Point(12, 84);
+            patternList.Location = new Point(10, 63);
+            patternList.Margin = new Padding(3, 2, 3, 2);
             patternList.Name = "patternList";
-            patternList.Size = new Size(158, 293);
+            patternList.Size = new Size(139, 221);
             patternList.TabIndex = 9;
             patternList.Visible = false;
             patternList.AfterSelect += patternList_AfterSelect;
@@ -166,9 +174,10 @@
             propertiesPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             propertiesPanel.AutoScroll = true;
             propertiesPanel.BackColor = Color.White;
-            propertiesPanel.Location = new Point(791, 54);
+            propertiesPanel.Location = new Point(692, 40);
+            propertiesPanel.Margin = new Padding(3, 2, 3, 2);
             propertiesPanel.Name = "propertiesPanel";
-            propertiesPanel.Size = new Size(206, 323);
+            propertiesPanel.Size = new Size(180, 242);
             propertiesPanel.TabIndex = 3;
             // 
             // label1
@@ -176,9 +185,9 @@
             label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline);
-            label1.Location = new Point(850, 28);
+            label1.Location = new Point(744, 21);
             label1.Name = "label1";
-            label1.Size = new Size(81, 20);
+            label1.Size = new Size(65, 15);
             label1.TabIndex = 0;
             label1.Text = "Propriétés";
             // 
@@ -186,9 +195,9 @@
             // 
             levelName.BorderStyle = BorderStyle.FixedSingle;
             levelName.Cursor = Cursors.Hand;
-            levelName.Location = new Point(12, 28);
+            levelName.Location = new Point(10, 21);
             levelName.Name = "levelName";
-            levelName.Size = new Size(158, 46);
+            levelName.Size = new Size(138, 35);
             levelName.TabIndex = 5;
             levelName.Text = "Pas de niveau sélectionné";
             levelName.Click += label2_Click;
@@ -197,9 +206,10 @@
             // saveButton
             // 
             saveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            saveButton.Location = new Point(791, 412);
+            saveButton.Location = new Point(692, 309);
+            saveButton.Margin = new Padding(3, 2, 3, 2);
             saveButton.Name = "saveButton";
-            saveButton.Size = new Size(206, 92);
+            saveButton.Size = new Size(180, 69);
             saveButton.TabIndex = 6;
             saveButton.Text = "Valider le niveau";
             saveButton.UseVisualStyleBackColor = true;
@@ -208,9 +218,10 @@
             // openLevelButton
             // 
             openLevelButton.Anchor = AnchorStyles.Left;
-            openLevelButton.Location = new Point(12, 127);
+            openLevelButton.Location = new Point(10, 95);
+            openLevelButton.Margin = new Padding(3, 2, 3, 2);
             openLevelButton.Name = "openLevelButton";
-            openLevelButton.Size = new Size(158, 29);
+            openLevelButton.Size = new Size(138, 22);
             openLevelButton.TabIndex = 7;
             openLevelButton.Text = "Ouvrir un niveau";
             openLevelButton.UseVisualStyleBackColor = true;
@@ -219,9 +230,10 @@
             // createLevelButton
             // 
             createLevelButton.Anchor = AnchorStyles.Left;
-            createLevelButton.Location = new Point(12, 189);
+            createLevelButton.Location = new Point(10, 142);
+            createLevelButton.Margin = new Padding(3, 2, 3, 2);
             createLevelButton.Name = "createLevelButton";
-            createLevelButton.Size = new Size(158, 29);
+            createLevelButton.Size = new Size(138, 22);
             createLevelButton.TabIndex = 8;
             createLevelButton.Text = "Créer un niveau";
             createLevelButton.UseVisualStyleBackColor = true;
@@ -236,42 +248,42 @@
             contextMenuPattern.ImageScalingSize = new Size(20, 20);
             contextMenuPattern.Items.AddRange(new ToolStripItem[] { ajouterUnPatternToolStripMenuItem, ajouterUneVagueToolStripMenuItem, supprimerLePatternToolStripMenuItem, supprimerLaVagueToolStripMenuItem, supprimerLennemiToolStripMenuItem });
             contextMenuPattern.Name = "contextMenuPattern";
-            contextMenuPattern.Size = new Size(216, 124);
+            contextMenuPattern.Size = new Size(183, 114);
             contextMenuPattern.Closing += contextMenuPattern_Closing;
             contextMenuPattern.ItemClicked += contexMenu_ItemClicked;
             // 
             // ajouterUnPatternToolStripMenuItem
             // 
             ajouterUnPatternToolStripMenuItem.Name = "ajouterUnPatternToolStripMenuItem";
-            ajouterUnPatternToolStripMenuItem.Size = new Size(215, 24);
+            ajouterUnPatternToolStripMenuItem.Size = new Size(182, 22);
             ajouterUnPatternToolStripMenuItem.Text = "Ajouter un pattern";
             ajouterUnPatternToolStripMenuItem.Visible = false;
             // 
             // ajouterUneVagueToolStripMenuItem
             // 
             ajouterUneVagueToolStripMenuItem.Name = "ajouterUneVagueToolStripMenuItem";
-            ajouterUneVagueToolStripMenuItem.Size = new Size(215, 24);
+            ajouterUneVagueToolStripMenuItem.Size = new Size(182, 22);
             ajouterUneVagueToolStripMenuItem.Text = "Ajouter une vague";
             ajouterUneVagueToolStripMenuItem.Visible = false;
             // 
             // supprimerLePatternToolStripMenuItem
             // 
             supprimerLePatternToolStripMenuItem.Name = "supprimerLePatternToolStripMenuItem";
-            supprimerLePatternToolStripMenuItem.Size = new Size(215, 24);
+            supprimerLePatternToolStripMenuItem.Size = new Size(182, 22);
             supprimerLePatternToolStripMenuItem.Text = "Supprimer le pattern";
             supprimerLePatternToolStripMenuItem.Visible = false;
             // 
             // supprimerLaVagueToolStripMenuItem
             // 
             supprimerLaVagueToolStripMenuItem.Name = "supprimerLaVagueToolStripMenuItem";
-            supprimerLaVagueToolStripMenuItem.Size = new Size(215, 24);
+            supprimerLaVagueToolStripMenuItem.Size = new Size(182, 22);
             supprimerLaVagueToolStripMenuItem.Text = "Supprimer la vague";
             supprimerLaVagueToolStripMenuItem.Visible = false;
             // 
             // supprimerLennemiToolStripMenuItem
             // 
             supprimerLennemiToolStripMenuItem.Name = "supprimerLennemiToolStripMenuItem";
-            supprimerLennemiToolStripMenuItem.Size = new Size(215, 24);
+            supprimerLennemiToolStripMenuItem.Size = new Size(182, 22);
             supprimerLennemiToolStripMenuItem.Text = "Supprimer l'ennemi";
             supprimerLennemiToolStripMenuItem.Visible = false;
             // 
@@ -281,7 +293,8 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fichierToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1019, 28);
+            menuStrip1.Padding = new Padding(5, 2, 0, 2);
+            menuStrip1.Size = new Size(892, 24);
             menuStrip1.TabIndex = 12;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -289,37 +302,37 @@
             // 
             fichierToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ouvrirUnNiveauToolStripMenuItem, toolStripSeparator1, créerUnNiveauToolStripMenuItem, toolStripSeparator2, enregistrerLeNiveauToolStripMenuItem });
             fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
-            fichierToolStripMenuItem.Size = new Size(66, 24);
+            fichierToolStripMenuItem.Size = new Size(54, 20);
             fichierToolStripMenuItem.Text = "Fichier";
             // 
             // ouvrirUnNiveauToolStripMenuItem
             // 
             ouvrirUnNiveauToolStripMenuItem.Name = "ouvrirUnNiveauToolStripMenuItem";
-            ouvrirUnNiveauToolStripMenuItem.Size = new Size(226, 26);
+            ouvrirUnNiveauToolStripMenuItem.Size = new Size(180, 22);
             ouvrirUnNiveauToolStripMenuItem.Text = "Ouvrir un niveau";
             ouvrirUnNiveauToolStripMenuItem.Click += ouvrirUnNiveauToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(223, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // créerUnNiveauToolStripMenuItem
             // 
             créerUnNiveauToolStripMenuItem.Name = "créerUnNiveauToolStripMenuItem";
-            créerUnNiveauToolStripMenuItem.Size = new Size(226, 26);
+            créerUnNiveauToolStripMenuItem.Size = new Size(180, 22);
             créerUnNiveauToolStripMenuItem.Text = "Créer un niveau";
             créerUnNiveauToolStripMenuItem.Click += créerUnNiveauToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(223, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
             // enregistrerLeNiveauToolStripMenuItem
             // 
             enregistrerLeNiveauToolStripMenuItem.Name = "enregistrerLeNiveauToolStripMenuItem";
-            enregistrerLeNiveauToolStripMenuItem.Size = new Size(226, 26);
+            enregistrerLeNiveauToolStripMenuItem.Size = new Size(180, 22);
             enregistrerLeNiveauToolStripMenuItem.Text = "Enregistrer le niveau";
             enregistrerLeNiveauToolStripMenuItem.Click += enregistrerLeNiveauToolStripMenuItem_Click;
             // 
@@ -327,9 +340,10 @@
             // 
             crossPictureBox.BackColor = Color.Transparent;
             crossPictureBox.Image = Properties.Resources.Cross;
-            crossPictureBox.Location = new Point(166, 224);
+            crossPictureBox.Location = new Point(145, 168);
+            crossPictureBox.Margin = new Padding(3, 2, 3, 2);
             crossPictureBox.Name = "crossPictureBox";
-            crossPictureBox.Size = new Size(45, 45);
+            crossPictureBox.Size = new Size(39, 34);
             crossPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             crossPictureBox.TabIndex = 13;
             crossPictureBox.TabStop = false;
@@ -341,10 +355,10 @@
             // Form1
             // 
             AllowDrop = true;
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1019, 520);
+            ClientSize = new Size(892, 390);
             Controls.Add(crossPictureBox);
             Controls.Add(menuStrip1);
             Controls.Add(createLevelButton);
@@ -359,6 +373,7 @@
             DoubleBuffered = true;
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "PiouMaker";
             Load += Form1_Load;
