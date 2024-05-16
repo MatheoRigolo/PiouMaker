@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.Json;
@@ -56,6 +57,9 @@ namespace PiouMaker
             listView1.Items.Add(item2);
             listView1.Items.Add(item3);
             initProperties();
+            typeof(Panel).InvokeMember("DoubleBuffered",
+   BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+   null, gamePanel, new object[] { true });
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -68,7 +72,7 @@ namespace PiouMaker
             {
                 selectedPattern = null;
                 selectedWave = null;
-                selectedEnemy =  null;
+                selectedEnemy = null;
                 gamePanel.Visible = false;
                 //modifyPropertyButton.Visible = true;
                 refreshProperties(true);
@@ -290,7 +294,7 @@ namespace PiouMaker
                     {
                         enemybox.Angle = 0f;
                     }
-                    
+
 
                     // On ajoute les controleurs pour les bouger
                     enemybox.MouseDown += PictureBox1_MouseDown;
@@ -993,7 +997,8 @@ namespace PiouMaker
                     if (enemyToCopy != null)
                     {
                         // ON ajoute l'ennemi et la pictureBox
-                        enemyToCopy.setPos(0, 0);
+                        Point point = enemyToCopy.getPos();
+                        enemyToCopy.setPos(enemyToCopy.getPos());
                         selectedWave.addEnemy(enemyToCopy);
                         EnemyPictureBox enemybox = new EnemyPictureBox();
                         switch (enemyToCopy.EnemyType)
@@ -1219,6 +1224,11 @@ namespace PiouMaker
                     }
                 }
             }
+        }
+
+        private void gameBackground_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
