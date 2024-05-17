@@ -397,6 +397,8 @@ namespace PiouMaker
         {
             //On refresh la liste
             patternList.Nodes.Clear();
+            //selectedPattern = null;
+            //selectedWave = null;
             List<String> patternNames;
             patternNames = currentLevel.getPatternNames();
             for (int i = 0; i < patternNames.Count; i++)
@@ -451,6 +453,9 @@ namespace PiouMaker
                 property3.setControl(comboBox3);
                 property3.setPos(propertiesPanel.DisplayRectangle, properties.Count);
                 properties.Add("isRandomPattern", property3);
+
+
+                addProperty("Difficulté :", currentLevel.getPattern(patternList.SelectedNode.Index).Difficulty.ToString(), "difficulty");
 
                 PropertyView property4 = new PropertyView();
                 property4.setPanelString("Nombre de vagues :");
@@ -1087,17 +1092,18 @@ namespace PiouMaker
                     refreshPatternList();
                     refreshProperties(true);
                 }
-                else if (properties.Count == 4 && selectedWave == null)
+                else if (selectedPattern != null && selectedWave == null)
                 {
                     //on a les propriétés d'un pattern
-                    currentLevel.getPattern(patternList.SelectedNode.Index).updatePatternWString(properties["patternName"].getControl().Text, properties["order"].getControl().Text, properties["isRandomPattern"].getControl().Text);
+                    selectedPattern.updatePatternWString(properties["patternName"].getControl().Text, properties["order"].getControl().Text, properties["isRandomPattern"].getControl().Text);
+                    selectedPattern.Difficulty = int.Parse(properties["difficulty"].getControl().Text);
                     refreshPatternList();
                 }
                 else if (properties.Count == 2 && selectedEnemy == null)
                 {
                     //on a les propriétés d'une wave
                     currentLevel.getPattern(patternList.SelectedNode.Parent.Index).getWave(patternList.SelectedNode.Index).setDuration(properties["duration"].getControl().Text);
-                    //refreshPatternList();
+                    //refreshPatternList;
                 }
                 else if (properties.Count > 0 && selectedEnemy != null)
                 {
@@ -1229,6 +1235,11 @@ namespace PiouMaker
         private void gameBackground_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

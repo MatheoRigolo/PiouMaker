@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,9 @@ namespace PiouMaker
         private string patternName = "nouveau Pattern";
         private int order = -1;
         private bool isRandom = false;
+        private int difficulty = 1;
+
+        public int Difficulty { get => difficulty; set { if (value <= 0) difficulty = 1; else { difficulty = value; } } }
 
         public Pattern()
         {

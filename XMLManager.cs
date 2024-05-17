@@ -60,6 +60,10 @@ namespace PiouMaker
                     {
                         patternToAdd.setIsRandom(patternNode.Attributes["random"].Value == "1");
                     }
+                    if (patternNode.Attributes["difficulty"] != null)
+                    {
+                        patternToAdd.Difficulty = int.Parse(patternNode.Attributes["difficulty"].Value);
+                    }
 
                     // Récupérer les vagues du pattern
                     XmlNodeList waveNodes = patternNode.SelectNodes("wave");
@@ -213,6 +217,7 @@ namespace PiouMaker
                 {
                     xmlWriter.WriteAttributeString("order", currentPattern.getOrder().ToString());
                 }
+                xmlWriter.WriteAttributeString("difficulty", currentPattern.Difficulty.ToString());
                 for (int j = 0; j < currentPattern.getPatternWaves().Count; j++)
                 {
                     Wave currentWave = currentPattern.getPatternWaves()[j];
