@@ -86,6 +86,12 @@ namespace PiouMaker
                             {
                                 enemyToAdd.EnemyType = enemyNode.Attributes["type"].Value;
                             }
+
+                            if (enemyNode.Attributes["apparitionDirection"] != null)
+                            {
+                                enemyToAdd.ApparitionDirection = enemyNode.Attributes["apparitionDirection"].Value;
+                            }
+
                             if (enemyNode.Attributes["pos"] != null)
                             {
                                 string pos = enemyNode.Attributes["pos"].Value;
@@ -97,6 +103,35 @@ namespace PiouMaker
                                 string[] posYParsed = elements[1].Split("%");
                                 Y = posYParsed[0];
                                 enemyToAdd.setPos(int.Parse(X), int.Parse(Y));
+
+                                if (enemyToAdd.Pos == new Point(-1,-1))
+                                {
+                                    // La position est random
+                                    enemyToAdd.RandomStartingPos = true;
+
+                                    // Une des pos aléatoire
+                                    Random rnd = new Random();
+                                    int min = 1;
+                                    int max = 100;
+                                    int otherPos = rnd.Next(min, max);
+
+                                    // on fix la pos de l'éditeur en fonction du coté d'apparition
+                                    switch(enemyToAdd.ApparitionDirection)
+                                    {
+                                        case "droite":
+                                            enemyToAdd.Pos = new Point(90, otherPos);
+                                            break;
+                                        case "gauche":
+                                            enemyToAdd.Pos = new Point(10, otherPos);
+                                            break;
+                                        case "haut":
+                                            enemyToAdd.Pos = new Point(otherPos, 10);
+                                            break;
+                                        case "bas":
+                                            enemyToAdd.Pos = new Point(otherPos, 90);
+                                            break;
+                                    }
+                                }
                             }
                             if (enemyNode.Attributes["spawnTime"] != null)
                             {
@@ -142,10 +177,6 @@ namespace PiouMaker
                             if (enemyNode.Attributes["moveSpeed"] != null)
                             {
                                 enemyToAdd.MoveSpeed = float.Parse(enemyNode.Attributes["moveSpeed"].Value, System.Globalization.CultureInfo.InvariantCulture);
-                            }
-                            if (enemyNode.Attributes["apparitionDirection"] != null)
-                            {
-                                enemyToAdd.ApparitionDirection = enemyNode.Attributes["apparitionDirection"].Value;
                             }
                             if (enemyNode.Attributes["xpGived"] != null)
                             {

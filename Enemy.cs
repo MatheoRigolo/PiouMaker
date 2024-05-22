@@ -43,6 +43,9 @@ namespace PiouMaker
         public int Health { get => health; set => health = value; }
         public int ScoreGived { get => scoreGived; set => scoreGived = value; }
         public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+        /// <summary>
+        /// Valeures possibles : droite, gauche, haut, bas
+        /// </summary>
         public string ApparitionDirection { get => apparitionDirection; set => apparitionDirection = value; }
         public Point Direction { get => direction; set => direction = value; }
         public int XpGived { get => xpGived; set => xpGived = value; }
