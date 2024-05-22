@@ -396,27 +396,52 @@ namespace PiouMaker
         private void refreshPatternList()
         {
             //On refresh la liste
-            patternList.Nodes.Clear();
-            //selectedPattern = null;
-            //selectedWave = null;
             List<String> patternNames;
             patternNames = currentLevel.getPatternNames();
+            if (patternNames.Count < patternList.Nodes.Count)
+            {
+                for (int k = patternNames.Count; k < patternList.Nodes.Count; k++)
+                {
+                    patternList.Nodes[k].Remove();
+                }
+            }
             for (int i = 0; i < patternNames.Count; i++)
             {
-                patternList.Nodes.Add(patternNames[i]);
+                if (i > patternList.Nodes.Count - 1)//Dans ce cas on doit ajouter le pattern 
+                {
+                    patternList.Nodes.Add(patternNames[i]);
+                }
+                else if (patternList.Nodes[i].Text != patternNames[i])
+                {//C'est pas bon
+                    patternList.Nodes[i].Text = patternNames[i];
+                }
                 if (selectedPattern != null && selectedPattern.getPatternName() == patternNames[i])
                 {
                     patternList.SelectedNode = patternList.Nodes[i];
-                    patternList.SelectedNode.Nodes.Clear();
                 }
             }
+
             List<Pattern> patterns = currentLevel.getPatterns();
             for (int i = 0; i < patterns.Count; i++)
             {
+                TreeNode patternNode = patternList.Nodes[i];
                 List<Wave> waveList = patterns[i].getPatternWaves();
-                for (int j = 0; j < waveList.Count; j++)
+                if (waveList.Count < patternNode.Nodes.Count)
                 {
-                    patternList.Nodes[i].Nodes.Add("Vague " + (j + 1));
+                    for (int k = waveList.Count; k < patternNode.Nodes.Count; k++)
+                    {
+                        patternNode.Nodes[k].Remove();
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < waveList.Count; j++)
+                    {
+                        if (j > patternList.Nodes[i].Nodes.Count - 1)
+                        {
+                            patternList.Nodes[i].Nodes.Add("Vague " + (j + 1));
+                        }
+                    }
                 }
             }
         }
@@ -581,6 +606,30 @@ namespace PiouMaker
                 addProperty("Vitesse de déplacement :", selectedEnemy.MoveSpeed.ToString(System.Globalization.CultureInfo.InvariantCulture), "moveSpeed");
                 addProperty("xp donnée :", selectedEnemy.XpGived.ToString(), "xpGived");
 
+                PropertyView propertyPos = new PropertyView();
+                propertyPos.setPanelString("Position initale aléatoire :");
+                ComboBox comboBoxPos = new ComboBox();
+                comboBoxPos.SelectedIndexChanged += comboBox_SelectedIndexChanged;
+                comboBoxPos.DropDownStyle = ComboBoxStyle.DropDownList;
+                comboBoxPos.Items.Add("Faux");
+                comboBoxPos.Items.Add("Vrai");
+                if (selectedEnemy.RandomStartingPos)
+                {
+                    comboBoxPos.SelectedIndex = 1;
+                }
+                else
+                {
+                    comboBoxPos.SelectedIndex = 0;
+                }
+                propertyPos.setControl(comboBoxPos);
+                propertyPos.setPos(propertiesPanel.DisplayRectangle, properties.Count);
+                properties.Add("randomStartingPos", propertyPos);
+
+                if (!selectedEnemy.RandomStartingPos)
+                {
+                    addProperty("Position en x : ", selectedEnemy.getPos().X.ToString(), "Xposition");
+                    addProperty("Position en y : ", selectedEnemy.getPos().Y.ToString(), "Yposition");
+                }
 
                 // Propriétés des shootings et des bomber
 
@@ -734,8 +783,8 @@ namespace PiouMaker
                 if (null == c) return;
                 isDragging = false;
                 // on change la direction de l'ennemi
-                int X = (int)((float)(c.Location.X + c.Size.Width / 2) / (float)gamePanel.Size.Width * 100);
-                int Y = (int)((float)(c.Location.Y + c.Size.Height / 2) / (float)gamePanel.Size.Height * 100);
+                int X = (int)((float)(c.Location.X) / (float)gamePanel.Size.Width * 100);
+                int Y = (int)((float)(c.Location.Y) / (float)gamePanel.Size.Height * 100);
                 selectedEnemy.Direction = new Point(X, Y);
             }
         }
@@ -809,9 +858,9 @@ namespace PiouMaker
 
         private void enemy_MouseClick(object sender, MouseEventArgs e)
         {
+            selectedEnemyBox = sender as EnemyPictureBox;
             if (e.Button == MouseButtons.Right && currentLevel != null)
             {
-                selectedEnemyBox = sender as EnemyPictureBox;
                 // On clique droit sur un pattern
                 contextMenuPattern.Items[4].Visible = true;
                 contextMenuPattern.Show(sender as PictureBox, e.Location);
@@ -1143,6 +1192,17 @@ namespace PiouMaker
                     {
                         selectedEnemy.XpGived = int.Parse(properties["xpGived"].getControl().Text);
                     }
+                    if (properties.ContainsKey("Xposition"))
+                    {
+                        selectedEnemy.Pos = new Point(int.Parse(properties["Xposition"].getControl().Text), selectedEnemy.Pos.Y);
+                    }
+                    if (properties.ContainsKey("Yposition"))
+                    {
+                        selectedEnemy.Pos = new Point(selectedEnemy.Pos.X, int.Parse(properties["Yposition"].getControl().Text));
+                        int X = (int)((float)(selectedEnemy.Pos.X) * (float)gamePanel.Size.Width / 100);
+                        int Y = (int)((float)(selectedEnemy.Pos.Y) * (float)gamePanel.Size.Height / 100);
+                        selectedEnemyBox.Location = new Point(X - selectedEnemyBox.Width / 2,Y - selectedEnemyBox.Height / 2);
+                    }
                 }
                 //refreshProperties();
             }
@@ -1226,6 +1286,11 @@ namespace PiouMaker
                             selectedEnemy.MustSetDirection = false;
                             crossPictureBox.Visible = false;
                         }
+                        refreshProperties();
+                    }
+                    else if(indexKey == "randomStartingPos")
+                    {
+                        selectedEnemy.RandomStartingPos = properties[indexKey].getControl().Text == "Vrai";
                         refreshProperties();
                     }
                 }

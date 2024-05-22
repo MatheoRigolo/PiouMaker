@@ -235,8 +235,15 @@ namespace PiouMaker
                             xmlWriter.WriteAttributeString("spawnTime", currentEnemy.SpawnTime.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         }
                         xmlWriter.WriteAttributeString("type", currentEnemy.EnemyType);
-                        string posString = currentEnemy.getPos().X + "%;" + currentEnemy.getPos().Y+"%";
-                        xmlWriter.WriteAttributeString("pos", posString);
+                        if (!currentEnemy.RandomStartingPos)
+                        {
+                            string posString = currentEnemy.getPos().X + "%;" + currentEnemy.getPos().Y + "%";
+                            xmlWriter.WriteAttributeString("pos", posString);
+                        }
+                        else
+                        {
+                            xmlWriter.WriteAttributeString("pos", "-1;-1");
+                        }
                         if (currentEnemy.AutoAim)
                         {
                             xmlWriter.WriteAttributeString("autoAim", "1");

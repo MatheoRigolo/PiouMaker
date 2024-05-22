@@ -33,6 +33,7 @@ namespace PiouMaker
 
         private int xpGived = 4;
         private bool mustSetDirection = false;
+        private bool randomStartingPos = false;
 
         public bool AutoAim { get => autoAim; set => autoAim = value; }
         public int Damage { get => damage; set => damage = value; }
@@ -49,6 +50,7 @@ namespace PiouMaker
         public string EnemyType { get => enemyType; set => enemyType = value; }
         public float SpawnTime { get => spawnTime; set => spawnTime = value; }
         public Point Pos { get => pos; set => pos = value; }
+        public bool RandomStartingPos { get => randomStartingPos; set => randomStartingPos = value; }
 
         public Enemy(string enemyType)
         {

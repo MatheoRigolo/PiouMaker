@@ -58,9 +58,9 @@
             créerUnNiveauToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             enregistrerLeNiveauToolStripMenuItem = new ToolStripMenuItem();
-            crossPictureBox = new PictureBox();
             toolStripSeparator3 = new ToolStripSeparator();
             toolStripMenuItem1 = new ToolStripMenuItem();
+            crossPictureBox = new PictureBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             gamePanel.SuspendLayout();
@@ -98,7 +98,7 @@
             listView1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             listView1.HeaderStyle = ColumnHeaderStyle.None;
             listView1.LargeImageList = enemies;
-            listView1.Location = new Point(6, -43);
+            listView1.Location = new Point(6, 6);
             listView1.Name = "listView1";
             listView1.Size = new Size(729, 80);
             listView1.TabIndex = 0;
@@ -327,6 +327,18 @@
             enregistrerLeNiveauToolStripMenuItem.Text = "Enregistrer le niveau";
             enregistrerLeNiveauToolStripMenuItem.Click += enregistrerLeNiveauToolStripMenuItem_Click;
             // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(223, 6);
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(226, 26);
+            toolStripMenuItem1.Text = "Quitter";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+            // 
             // crossPictureBox
             // 
             crossPictureBox.BackColor = Color.Transparent;
@@ -341,18 +353,6 @@
             crossPictureBox.MouseDown += PictureBox1_MouseDown;
             crossPictureBox.MouseMove += PictureBox1_MouseMove;
             crossPictureBox.MouseUp += cross_MouseUp;
-            // 
-            // toolStripSeparator3
-            // 
-            toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(223, 6);
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(226, 26);
-            toolStripMenuItem1.Text = "Quitter";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // Form1
             // 
