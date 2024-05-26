@@ -858,7 +858,13 @@ namespace PiouMaker
 
         private void enemy_MouseClick(object sender, MouseEventArgs e)
         {
+
             selectedEnemyBox = sender as EnemyPictureBox;
+            foreach(EnemyPictureBox ePB in enemyPicures)
+            {
+                ePB.BackColor =Color.Transparent;
+            }
+            selectedEnemyBox.BackColor = Color.Red;
             if (e.Button == MouseButtons.Right && currentLevel != null)
             {
                 // On clique droit sur un pattern
