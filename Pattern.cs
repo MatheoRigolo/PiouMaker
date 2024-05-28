@@ -17,6 +17,11 @@ namespace PiouMaker
 
         public int Difficulty { get => difficulty; set { if (value <= 0) difficulty = 1; else { difficulty = value; } } }
 
+        public bool IsRandom { get => isRandom; set => isRandom = value; }
+        public int Order { get => order; set => order = value; }
+        public string PatternName { get => patternName; set => patternName = value; }
+        public List<Wave> PatternWaves { get => patternWaves; set => patternWaves = value; }
+
         public Pattern()
         {
             patternWaves = new List<Wave>();

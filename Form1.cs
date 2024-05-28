@@ -34,6 +34,9 @@ namespace PiouMaker
         Wave? selectedWave;
         Enemy? selectedEnemy;
 
+        // Retenir ce qui est copié
+        string elementcopied;
+
         //utile pour drag and drop
         List<EnemyPictureBox> enemyPicures = new List<EnemyPictureBox>();
         EnemyPictureBox selectedEnemyBox;
@@ -1051,7 +1054,24 @@ namespace PiouMaker
                 {
                     CopyToClipboard<Enemy>(selectedEnemy);
                 }
-                else if (e.Control && e.KeyCode == Keys.V)
+            }
+            else if (selectedWave != null)
+            {
+                if (e.Control && e.KeyCode == Keys.C)
+                {
+                    CopyToClipboard<Wave>(selectedWave);
+                }
+            }
+            else if(selectedPattern != null)
+            {
+                if (e.Control && e.KeyCode == Keys.C)
+                {
+                    CopyToClipboard<Pattern>(selectedPattern);
+                }
+            }
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                if (elementcopied =="Enemy" && selectedWave != null)
                 {
                     Enemy? enemyToCopy = PasteFromClipboard<Enemy>();
                     if (enemyToCopy != null)
@@ -1102,17 +1122,16 @@ namespace PiouMaker
                         gamePanel.Controls[gamePanel.Controls.Count - 1].BringToFront();
                     }
                 }
-            }
-            else if (selectedWave != null)
-            {
-                if (e.Control && e.KeyCode == Keys.C)
-                {
-                    CopyToClipboard<Wave>(selectedWave);
-                }
-                else if (e.Control && e.KeyCode == Keys.V)
+                else if (elementcopied == "Wave" && selectedPattern != null)
                 {
                     Wave? waveToCopy = PasteFromClipboard<Wave>();
                     if (waveToCopy != null) selectedPattern.addWave(waveToCopy);
+                    refreshPatternList();
+                }
+                else if(elementcopied == "Pattern" && currentLevel != null)
+                {
+                    Pattern? patternToCopy = PasteFromClipboard<Pattern>();
+                    if (patternToCopy != null) currentLevel.addPattern(patternToCopy);
                     refreshPatternList();
                 }
             }
@@ -1227,7 +1246,7 @@ namespace PiouMaker
             if (obj != null)
             {
                 string jsonString = JsonSerializer.Serialize(obj);
-
+                elementcopied =  typeof(T).Name;
                 // Copie de l'objet sérialisé dans le Presse-papiers
                 Clipboard.SetText(jsonString);
             }
